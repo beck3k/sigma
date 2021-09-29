@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {onMount} from 'svelte'
 
 @Component({
   selector: 'app-home',
@@ -9,31 +8,32 @@ import {onMount} from 'svelte'
 export class HomeComponent implements OnInit {
 
   identityUrl ='https://identity.deso.org'
-	
+
 	identityWindow
 	user;
 	userPayload;
 	loggedIn = false;
-	
+
 	launchLogin(){
 			const h = 1000;
 			const w = 800;
 			const y = window.outerHeight / 2 + window.screenY - h / 2;
 			const x = window.outerWidth / 2 + window.screenX - w / 2;
 			window.addEventListener('message', (event) => {
-				console.log(event)
+				// console.log(event)
 				//do we have data
 				if(event.data && event.origin){
 					//can we trust it
-					if(event.origin ==='https://identity.bitclout.com'){
-						
+					if(event.origin ==='https://identity.deso.org'){
+            console.log('event data', event.data);
+
 						//initialize
 						if(event.data.method ==='initialize'){
 							console.log('initialize')
-						
+
 							const data = {id:event.data.id,service: 'identity'};
 							console.log(data)
-							
+
 							console.log(location.origin)
 							this.identityWindow.postMessage(data,'*');
 							//event.source.postMessage(data,location.origin)
@@ -41,21 +41,23 @@ export class HomeComponent implements OnInit {
 						//login
 						if(event.data.method ==='login'){
 							this.user = event.data.payload.publicKeyAdded;
+              localStorage.setItem("user", this.user);
 							console.log(this.user);
 							this.userPayload = event.data.payload.users[this.user];
+              localStorage.setItem("userPayload", this.userPayload);
 							console.log(this.userPayload);
 							this.loggedIn = true;
 							this.identityWindow.close();
 						}
 					}
-					
+
 				}
-			
+
 			},false);
-		
+
 			this.identityWindow = window.open(this.identityUrl + '/log-in', null, `toolbar=no, width=${w}, height=${h}, top=${y}, left=${x}`);
-		
-			
+
+
 		}
 
 
