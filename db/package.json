@@ -1,0 +1,10 @@
+{
+  "name": "db",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "author": "Beck",
+  "license": "MIT",
+  "dependencies": {
+    "mongoose": "^6.0.8"
+  }
+}

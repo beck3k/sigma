@@ -44,7 +44,7 @@ export class HomeComponent implements OnInit {
               localStorage.setItem("user", this.user);
 							console.log(this.user);
 							this.userPayload = event.data.payload.users[this.user];
-              localStorage.setItem("userPayload", this.userPayload);
+              localStorage.setItem("userPayload", JSON.stringify(this.userPayload));
 							console.log(this.userPayload);
 							this.loggedIn = true;
 							this.identityWindow.close();
@@ -55,7 +55,7 @@ export class HomeComponent implements OnInit {
 
 			},false);
 
-			this.identityWindow = window.open(this.identityUrl + '/log-in', null, `toolbar=no, width=${w}, height=${h}, top=${y}, left=${x}`);
+			this.identityWindow = window.open(this.identityUrl + '/log-in?testnet=true', null, `toolbar=no, width=${w}, height=${h}, top=${y}, left=${x}`);
 
 
 		}
