@@ -4,8 +4,9 @@ import { GlobalVarsService } from "../global-vars.service";
 import { Router } from "@angular/router";
 import { SearchBarComponent } from '../search-bar/search-bar.component'
 import { HttpClient } from '@angular/common/http';
-import Clappr from '@clappr/core'
-import * as hlsjs from 'p2p-media-loader-hlsjs';
+
+declare var p2pml: any;
+declare var Clappr: any;
 
 @Component({
   selector: 'app-stream-view',
@@ -17,15 +18,16 @@ export class StreamViewComponent implements OnInit {
   constructor(public globalVars: GlobalVarsService, private router: Router, private http: HttpClient) { }
 
   ngOnInit(): void {
+    console.log('p2pml', p2pml)
     this.getStreamers();
-    if (hlsjs.Engine.isSupported()) {
-      var engine = new hlsjs.Engine();
+    if (p2pml.hlsjs.Engine.isSupported()) {
+      var engine = new p2pml.hlsjs.Engine();
       var loader = engine.createLoaderClass();
     } else {
       // var loader = XHRLoader;
       console.log('fuck');
     }
-    var engine = new hlsjs.Engine();
+    var engine = new p2pml.hlsjs.Engine();
     var player = new Clappr.Player({
       parentId: "#video",
       source: "http://149.159.16.161:8082/live/615bba8d7db93bbee3d42621/index.m3u8",
@@ -38,10 +40,10 @@ export class StreamViewComponent implements OnInit {
         }
       }
     });
-    if (hlsjs.Engine.isSupported()) hlsjs.initClapprPlayer(player);
+    if (p2pml.hlsjs.Engine.isSupported()) p2pml.hlsjs.initClapprPlayer(player);
     player.play(true);
     console.log(player);
-    console.log(hlsjs.Engine.isSupported())
+    console.log(p2pml.hlsjs.Engine.isSupported())
   }
 
   createStream(){
