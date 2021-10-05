@@ -11,10 +11,10 @@
             <!-- <simple-profile-card #loggedIn [profile]="globalVars.loggedInUser.PublicKeyBase58Check"></simple-profile-card> -->
             <div *ngIf="!this.globalVars.loggedInUser" class="w-100 align-items-center justify-content-center">
                 <button (click)="globalVars.launchSignupFlow()">
-                  Sign Up 
+                  Sign Up
                 </button>
                 <button (click)="globalVars.launchSignupFlow()" class="ml-2">
-                    Login 
+                    Login
                 </button>
                 <!-- trying to conditionally render signup and login button -->
             </div>
@@ -26,9 +26,6 @@
             <p>Following</p>
           </div>
           <div class="col-7">
-              <video>
-                  <source src="http://149.159.16.161:8082/live/615bba8d7db93bbee3d42621/index.m3u8">
-              </video>
             <h6>stream and about</h6>
             <div id="video"></div>
             <div class="player"></div>
@@ -36,10 +33,10 @@
           <div class="col-3">
             <h6>chat</h6>
           </div>
-        
+
 
       </div>
-      <button (click)="createStream()">Create Stream</button>
+      <!-- <button (click)="createStream()">Create Stream</button> -->
 
       <!-- check out following and make it such that u click on user and it comes -->
 
