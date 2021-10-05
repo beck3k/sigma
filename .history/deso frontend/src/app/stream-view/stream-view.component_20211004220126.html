@@ -1,0 +1,38 @@
+<!-- get access to price of creator -->
+
+<div class="container-fluid">
+    <br>
+    <div class="row">
+        <div class="col-sm col-2">logo</div>
+        <div class="col-sm col-6">
+            <search-bar></search-bar>
+          </div>
+          <div class="col-sm col-4">
+            <!-- <simple-profile-card #loggedIn [profile]="globalVars.loggedInUser.PublicKeyBase58Check"></simple-profile-card> -->
+            <div *ngIf="!this.globalVars.loggedInUser" class="w-100 align-items-center justify-content-center">
+                <button (click)="globalVars.launchSignupFlow()">
+                  Sign Up 
+                </button>
+                <button (click)="globalVars.launchSignupFlow()" class="ml-2">
+                    Login 
+                </button>
+                <!-- trying to conditionally render signup and login button -->
+            </div>
+            <change-account-selector class="w-25" *ngIf="this.globalVars.loggedInUser"></change-account-selector>
+          </div>
+    </div>
+    <br>
+    <div class="row">
+          <div class="col-3">
+            <h6>Following</h6>
+          </div>
+          <div class="col-9">
+            <h6></h6>
+          </div>
+        
+
+      </div>
+
+</div>
+
+
