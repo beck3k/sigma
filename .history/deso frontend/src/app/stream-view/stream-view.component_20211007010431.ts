@@ -21,9 +21,7 @@ export class StreamViewComponent implements OnInit {
   streamerUsername // taken from url
   streamerProfilePicture // taken from get-single-profile-picture
   followedStreamersList
-  constructor(public globalVars: GlobalVarsService, private router: Router, private http: HttpClient, private route: ActivatedRoute, private backendApi: BackendApiService) {
-    
-   }
+  constructor(public globalVars: GlobalVarsService, private router: Router, private http: HttpClient, private route: ActivatedRoute, private backendApi: BackendApiService) { }
 
   // get access to streamer public key from param and then query backend for stream and then use user public key to populate following. if public key not found in streams then show page 404. 
   orderby: string;
@@ -33,7 +31,6 @@ export class StreamViewComponent implements OnInit {
       this.streamerUsername = params.get("username")
       this.getStreamer();
     })
-
 
   }
 

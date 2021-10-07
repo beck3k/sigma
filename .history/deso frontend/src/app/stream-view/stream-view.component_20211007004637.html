@@ -25,9 +25,7 @@
           <div class="col-2">
             <p>Following</p>
             <div *ngFor="let streamer of followedStreamersList.following">
-              <div *ngIf="streamer!==this.streamerProfile.PublicKeyBase58Check">
-                <button (click)="changeStream(streamer)">{{streamer}}</button>
-              </div>
+              <div *ngIf="streamer!==this.streamerProfile.PublicKeyBase58Check">{{streamer}}</div>
               
             </div>
           </div>

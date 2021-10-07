@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppRoutingModule } from "../app-routing.module";
 import { GlobalVarsService } from "../global-vars.service";
-import { Router , NavigationExtras} from "@angular/router";
+import { Router } from "@angular/router";
 import { SearchBarComponent } from '../search-bar/search-bar.component'
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
@@ -20,10 +20,8 @@ export class StreamViewComponent implements OnInit {
   streamerProfile // taken from get-single-profile
   streamerUsername // taken from url
   streamerProfilePicture // taken from get-single-profile-picture
-  followedStreamersList
-  constructor(public globalVars: GlobalVarsService, private router: Router, private http: HttpClient, private route: ActivatedRoute, private backendApi: BackendApiService) {
-    
-   }
+  followedStreamers
+  constructor(public globalVars: GlobalVarsService, private router: Router, private http: HttpClient, private route: ActivatedRoute, private backendApi: BackendApiService) { }
 
   // get access to streamer public key from param and then query backend for stream and then use user public key to populate following. if public key not found in streams then show page 404. 
   orderby: string;
@@ -34,14 +32,6 @@ export class StreamViewComponent implements OnInit {
       this.getStreamer();
     })
 
-
-  }
-
-  changeStream(newStreamerPublicKey) {
-    this.backendApi.GetSingleProfile(this.globalVars.localNode, newStreamerPublicKey, "").subscribe(
-      (res) => {
-        console.log(res.Profile.Username)
-      this.router.navigate(['../',res.Profile.Username],{relativeTo: this.route})})
   }
 
   followStreamer(){
@@ -50,9 +40,8 @@ export class StreamViewComponent implements OnInit {
   }
 
   followedStreamers() {
-    this.http.get(`http://149.159.16.161:3123/following/${this.globalVars.loggedInUser.PublicKeyBase58Check}`).subscribe((data)=>{
-      this.followedStreamersList=data
-    })
+    this.http.get(`http://149.159.16.161:3123/following/${this.globalVars.loggedInUser.ProfileEntryResponse.Username}`).subscribe((data)=>{this.followedStreamers=data})
+    console.log(this.followedStreamers)
   }
 
   createStream() {
@@ -64,7 +53,8 @@ export class StreamViewComponent implements OnInit {
     this.backendApi.GetSingleProfile(this.globalVars.localNode, "", this.streamerUsername).subscribe(
       (res) => {
         this.streamerProfile = res.Profile;
-        
+        console.log(this.streamerProfile)
+        console.log(`http://149.159.16.161:3123/stream/${this.streamerProfile.PublicKeyBase58Check}`)
         this.http.get(`http://149.159.16.161:3123/stream/${this.streamerProfile.PublicKeyBase58Check}`).subscribe((data)=>{
           this.streamer = data
           console.log(this.streamer)
@@ -97,7 +87,6 @@ export class StreamViewComponent implements OnInit {
               });
               if (p2pml.hlsjs.Engine.isSupported()) p2pml.hlsjs.initClapprPlayer(player);
               player.play(true);
-              this.followedStreamers()
             });
       },
     );
