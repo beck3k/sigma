@@ -85,7 +85,8 @@ class RouteNames {
 }
 
 const routes: Routes = [
-  { path: "", component: StreamViewComponent, pathMatch: "full" },
+  { path:"", component: LandingPageComponent, pathMatch: "full" },
+  { path: ":username", component: StreamViewComponent, pathMatch: "full" },
   { path: RouteNames.BROWSE, component: BrowsePageComponent, pathMatch: "full" },
   { path: RouteNames.CREATORS, component: CreatorsLeaderboardPageComponent, pathMatch: "full" },
   { path: RouteNames.USER_PREFIX + "/:username", component: CreatorProfilePageComponent, pathMatch: "full" },

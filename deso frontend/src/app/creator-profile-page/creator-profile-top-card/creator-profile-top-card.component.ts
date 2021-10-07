@@ -113,6 +113,7 @@ export class CreatorProfileTopCardComponent implements OnInit, OnDestroy {
   }
 
   usdMarketCap() {
+
     return this.globalVars.abbreviateNumber(
       this.globalVars.nanosToUSDNumber(this.coinsInCirculation() * this.profile.CoinPriceDeSoNanos),
       3,

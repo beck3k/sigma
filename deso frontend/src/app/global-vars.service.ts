@@ -492,6 +492,7 @@ export class GlobalVarsService {
   }
 
   nanosToUSDNumber(nanos: number): number {
+    console.log(this.nanosPerUSDExchangeRate)
     return nanos / this.nanosPerUSDExchangeRate;
   }
 
@@ -984,6 +985,7 @@ export class GlobalVarsService {
   }
 
   _updateDeSoExchangeRate() {
+    console.log("making request")
     this.backendApi.GetExchangeRate(this.localNode).subscribe(
       (res: any) => {
         // BTC
@@ -1005,6 +1007,7 @@ export class GlobalVarsService {
         this.nanosPerUSDExchangeRate = nanosPerUnit / (this.ExchangeUSDCentsPerDeSo / 100);
         this.desoToUSDExchangeRateToDisplay = this.nanosToUSD(nanosPerUnit, null);
         this.desoToUSDExchangeRateToDisplay = this.nanosToUSD(nanosPerUnit, 2);
+        
       },
       (error) => {
         console.error(error);
