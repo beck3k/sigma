@@ -53,33 +53,12 @@ export class StreamViewComponent implements OnInit {
           console.log(this.streamer)
           this.backendApi.GetSingleProfilePicture(
             this.globalVars.localNode,
-            this.streamer.stream.publicKey,
+            this.streamer.stream[0].publicKey,
             this.globalVars.profileUpdateTimestamp ? `?${this.globalVars.profileUpdateTimestamp}` : ""
           )
             .subscribe((res) => {
               this._readImageFileToProfilePicInput(res);
               console.log(res)
-              if (p2pml.hlsjs.Engine.isSupported()) {
-                var engine = new p2pml.hlsjs.Engine();
-                var loader = engine.createLoaderClass();
-              } else {
-                // var loader = XHRLoader;
-              }
-              var engine = new p2pml.hlsjs.Engine();
-              var player = new Clappr.Player({
-                parentId: "#video",
-                source: `http://149.159.16.161:8082/live/${this.streamer.stream._id}/index.m3u8`,
-                width: "100%",
-                height: "100%",
-                playback: {
-                  hlsjsConfig: {
-                    liveSyncDurationCount: 7,
-                    loader: loader
-                  }
-                }
-              });
-              if (p2pml.hlsjs.Engine.isSupported()) p2pml.hlsjs.initClapprPlayer(player);
-              player.play(true);
             });
       },
     );
@@ -95,7 +74,27 @@ export class StreamViewComponent implements OnInit {
     //   ]
     // }
 
-
+    if (p2pml.hlsjs.Engine.isSupported()) {
+      var engine = new p2pml.hlsjs.Engine();
+      var loader = engine.createLoaderClass();
+    } else {
+      // var loader = XHRLoader;
+    }
+    var engine = new p2pml.hlsjs.Engine();
+    var player = new Clappr.Player({
+      parentId: "#video",
+      source: `http://149.159.16.161:8082/live/${this.streamer.stream[0]._id}/index.m3u8`,
+      width: "100%",
+      height: "100%",
+      playback: {
+        hlsjsConfig: {
+          liveSyncDurationCount: 7,
+          loader: loader
+        }
+      }
+    });
+    if (p2pml.hlsjs.Engine.isSupported()) p2pml.hlsjs.initClapprPlayer(player);
+    player.play(true);
     })
   }
 

@@ -59,27 +59,6 @@ export class StreamViewComponent implements OnInit {
             .subscribe((res) => {
               this._readImageFileToProfilePicInput(res);
               console.log(res)
-              if (p2pml.hlsjs.Engine.isSupported()) {
-                var engine = new p2pml.hlsjs.Engine();
-                var loader = engine.createLoaderClass();
-              } else {
-                // var loader = XHRLoader;
-              }
-              var engine = new p2pml.hlsjs.Engine();
-              var player = new Clappr.Player({
-                parentId: "#video",
-                source: `http://149.159.16.161:8082/live/${this.streamer.stream._id}/index.m3u8`,
-                width: "100%",
-                height: "100%",
-                playback: {
-                  hlsjsConfig: {
-                    liveSyncDurationCount: 7,
-                    loader: loader
-                  }
-                }
-              });
-              if (p2pml.hlsjs.Engine.isSupported()) p2pml.hlsjs.initClapprPlayer(player);
-              player.play(true);
             });
       },
     );
@@ -95,7 +74,27 @@ export class StreamViewComponent implements OnInit {
     //   ]
     // }
 
-
+    if (p2pml.hlsjs.Engine.isSupported()) {
+      var engine = new p2pml.hlsjs.Engine();
+      var loader = engine.createLoaderClass();
+    } else {
+      // var loader = XHRLoader;
+    }
+    var engine = new p2pml.hlsjs.Engine();
+    var player = new Clappr.Player({
+      parentId: "#video",
+      source: `http://149.159.16.161:8082/live/${this.streamer.stream._id}/index.m3u8`,
+      width: "100%",
+      height: "100%",
+      playback: {
+        hlsjsConfig: {
+          liveSyncDurationCount: 7,
+          loader: loader
+        }
+      }
+    });
+    if (p2pml.hlsjs.Engine.isSupported()) p2pml.hlsjs.initClapprPlayer(player);
+    player.play(true);
     })
   }
 
