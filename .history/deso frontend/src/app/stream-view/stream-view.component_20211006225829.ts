@@ -41,19 +41,19 @@ export class StreamViewComponent implements OnInit {
   }
 
   getStreamer() {
-    this.http.get(`http://149.159.16.161:3123/stream/${this.streamerUsername}`).subscribe((data)=>{
-    this.streamer = data
+    // this.http.get(`http://149.159.16.161:3123/stream/${this.streamerUsername}`).subscribe((data)=>{
+    // this.streamer = data
     // // get creators - creator coin value and username -- work here
-    // this.streamer = {
-    //   streams: [
-    //     {
-    //       _id: "615e20379a87aee1a0d381e5",
-    //       publicKey: "BC1YLj4aFMVM1g44wBgibYq8dFQ1NxTCpQFyJnNMqGqmyUt9zDVjZ5L",
-    //       username: "shivamgarg",
-    //       __v: 0
-    //     }
-    //   ]
-    // }
+    this.streamer = {
+      streams: [
+        {
+          _id: "615e20379a87aee1a0d381e5",
+          publicKey: "BC1YLj4aFMVM1g44wBgibYq8dFQ1NxTCpQFyJnNMqGqmyUt9zDVjZ5L",
+          username: "shivamgarg",
+          __v: 0
+        }
+      ]
+    }
     this.backendApi.GetSingleProfile(this.globalVars.localNode, "", this.streamerUsername).subscribe(
       (res) => {
         this.streamerProfile = res.Profile;
@@ -62,7 +62,7 @@ export class StreamViewComponent implements OnInit {
 
     this.backendApi.GetSingleProfilePicture(
       this.globalVars.localNode,
-      this.streamer.stream[0].publicKey,
+      this.streamer.streams[0].publicKey,
       this.globalVars.profileUpdateTimestamp ? `?${this.globalVars.profileUpdateTimestamp}` : ""
     )
       .subscribe((res) => {
@@ -82,7 +82,7 @@ export class StreamViewComponent implements OnInit {
     var engine = new p2pml.hlsjs.Engine();
     var player = new Clappr.Player({
       parentId: "#video",
-      source: `http://149.159.16.161:8082/live/${this.streamer.stream[0]._id}/index.m3u8`,
+      source: `http://149.159.16.161:8082/live/${this.streamer.streams[0]._id}/index.m3u8`,
       width: "100%",
       height: "100%",
       playback: {
@@ -94,7 +94,7 @@ export class StreamViewComponent implements OnInit {
     });
     if (p2pml.hlsjs.Engine.isSupported()) p2pml.hlsjs.initClapprPlayer(player);
     player.play(true);
-    })
+    // })
   }
 
   _readImageFileToProfilePicInput(file: Blob | File) {

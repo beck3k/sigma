@@ -30,17 +30,12 @@
             <div class="player"></div>
             <div class="row">
               <div class="col-3">
-                <img [src]="streamerProfilePicture" alt="streamer profile picture"/>
+                profile pic
+                <div [style.background-image]="'url(' + profilePicInput + ')'"></div>
               </div>
               <div class="col-9">
                 <div class="row">{{this.streamerProfile.Username}}</div>
                 <div class="row">{{this.streamerProfile.Description}}</div>
-                <creator-profile-top-card
-                *ngIf="streamerProfile"
-                [profile]="streamerProfile"
-                (userUnblocked)="unblockUser()"
-                (userBlocked)="blockUser()"
-              ></creator-profile-top-card>
                 <div class="row">flair</div>
               </div>
 
@@ -56,8 +51,8 @@
 
       <br>
       <br>
-      <!-- <br>
-      <update-profile [loggedInUser]="globalVars.loggedInUser" [inTutorial]="false"></update-profile> -->
+      <br>
+      <update-profile [loggedInUser]="globalVars.loggedInUser" [inTutorial]="false"></update-profile>
 
       <!-- check out following and make it such that u click on user and it comes -->
 

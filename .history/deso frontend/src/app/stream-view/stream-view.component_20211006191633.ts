@@ -25,7 +25,6 @@ export class StreamViewComponent implements OnInit {
   // get access to streamer public key from param and then query backend for stream and then use user public key to populate following. if public key not found in streams then show page 404. 
   orderby: string;
   ngOnInit(): void {
-    this.globalVars._updateDeSoExchangeRate()
     this.route.paramMap.subscribe(params => {
       this.streamerUsername = params.get("username")
       this.getStreamer();
@@ -35,34 +34,35 @@ export class StreamViewComponent implements OnInit {
 
 
 
-  createStream() {
+  createStream() { // fix this
     this.http.post("http://149.159.16.161:3123/stream", { username: this.globalVars.loggedInUser.ProfileEntryResponse.Username, publicKey: this.globalVars.loggedInUser.PublicKeyBase58Check }).subscribe((data) => {
     })
   }
 
   getStreamer() {
-    this.http.get(`http://149.159.16.161:3123/stream/${this.streamerUsername}`).subscribe((data)=>{
-    this.streamer = data
+    // this.http.get(`http://149.159.16.161:3123/stream/${this.streamerUsername}`).subscribe((data)=>{
+    // this.streamer = data
     // // get creators - creator coin value and username -- work here
-    // this.streamer = {
-    //   streams: [
-    //     {
-    //       _id: "615e20379a87aee1a0d381e5",
-    //       publicKey: "BC1YLj4aFMVM1g44wBgibYq8dFQ1NxTCpQFyJnNMqGqmyUt9zDVjZ5L",
-    //       username: "shivamgarg",
-    //       __v: 0
-    //     }
-    //   ]
-    // }
-    this.backendApi.GetSingleProfile(this.globalVars.localNode, "", this.streamerUsername).subscribe(
-      (res) => {
-        this.streamerProfile = res.Profile;
-      },
-    );
-
+    // this.backendApi.GetSingleProfile(this.globalVars.localNode, "", this.streamerUsername).subscribe(
+    //   (res) => {
+    //     this.streamerProfile = res.Profile;
+    //   },
+    // );
+    this.streamer = {
+      streams: [
+        {
+          _id: "615e20379a87aee1a0d381e5",
+          publicKey: "BC1YLj4aFMVM1g44wBgibYq8dFQ1NxTCpQFyJnNMqGqmyUt9zDVjZ5L",
+          username: "shivamgarg",
+          __v: 0
+        }
+      ]
+    }
+    
+    console.log(this.streamer.streams[0].publicKey)
     this.backendApi.GetSingleProfilePicture(
       this.globalVars.localNode,
-      this.streamer.stream[0].publicKey,
+      this.streamer.streams[0].publicKey,
       this.globalVars.profileUpdateTimestamp ? `?${this.globalVars.profileUpdateTimestamp}` : ""
     )
       .subscribe((res) => {
@@ -94,7 +94,7 @@ export class StreamViewComponent implements OnInit {
     });
     if (p2pml.hlsjs.Engine.isSupported()) p2pml.hlsjs.initClapprPlayer(player);
     player.play(true);
-    })
+    // })
   }
 
   _readImageFileToProfilePicInput(file: Blob | File) {
