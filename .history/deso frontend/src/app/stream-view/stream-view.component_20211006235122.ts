@@ -43,16 +43,15 @@ export class StreamViewComponent implements OnInit {
   }
 
   getStreamer() {
+    console.log(this.streamerUsername)
     this.backendApi.GetSingleProfile(this.globalVars.localNode, "", this.streamerUsername).subscribe(
       (res) => {
         this.streamerProfile = res.Profile;
-        console.log(this.streamerProfile)
-        console.log(`http://149.159.16.161:3123/stream/${this.streamerProfile.PublicKeyBase58Check}`)
-        this.http.get(`http://149.159.16.161:3123/stream/${this.streamerProfile.PublicKeyBase58Check}`).subscribe((data)=>{
-          this.streamer = data
-          console.log(this.streamer)
+        console.log(this.streamerProfile.Profile.PublicKeyBase58Check)
       },
     );
+    this.http.get(`http://149.159.16.161:3123/stream/${this.streamerProfile.Profile.PublicKeyBase58Check}`).subscribe((data)=>{
+    this.streamer = data
     // // get creators - creator coin value and username -- work here
     // this.streamer = {
     //   streams: [

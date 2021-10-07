@@ -984,6 +984,7 @@ export class GlobalVarsService {
   }
 
   _updateDeSoExchangeRate() {
+    console.log("making request")
     this.backendApi.GetExchangeRate(this.localNode).subscribe(
       (res: any) => {
         // BTC
