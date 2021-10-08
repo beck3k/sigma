@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
   res.send('API Alive');
 });
 
-app.post('/stream', async (req, res) => {
+function getKey(){
   var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   var name = "";
   var charactersLength = characters.length;
@@ -26,6 +26,11 @@ app.post('/stream', async (req, res) => {
     name += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   var key = CryptoJS.SHA256("live/"+name).toString();
+  return key;
+}
+
+app.post('/stream', async (req, res) => {
+  var key = getKey();
   var publicKey = req.body.publicKey;
 
   var stream = await StreamModel.findOneAndUpdate({
@@ -44,8 +49,18 @@ app.post('/stream', async (req, res) => {
   });
 });
 
+app.get('/private/stream/:publicKey', async (req, res) => {
+  const stream = await StreamModel.findOneAndUpdate({
+    publicKey: req.params.publicKey
+  });
+
+  res.json({
+    stream
+  });
+});
+
 app.get('/streams', async (req, res) => {
-  const streams = await StreamModel.find();
+  const streams = await StreamModel.find({}, '-key');
 
   res.send({
     streams
@@ -55,7 +70,7 @@ app.get('/streams', async (req, res) => {
 app.get('/stream/:pubkey', async (req, res) => {
   const stream = await StreamModel.findOne({
     publicKey: req.params.pubkey
-  });
+  }, '-key');
   res.send({
     stream
   });
@@ -96,13 +111,9 @@ app.get('/following/:publicKey', async (req, res) => {
   });
 
   res.json({
-    following: (following) ? following.following : false
+    following: (following) ? following.following : []
   });
 });
-
-// app.post('/stream', (req, res) => {
-
-// });
 
 async function run(): Promise<void> {
   await mongoose.connect(<string>process.env.DBURL, {

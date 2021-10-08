@@ -51,8 +51,16 @@ app.post('/stream', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         streamKey: `${stream._id}?pwd=${key}`
     });
 }));
+app.get('/private/stream/:publicKey', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const stream = yield db_1.StreamModel.findOne({
+        publicKey: req.params.publicKey
+    });
+    res.json({
+        stream
+    });
+}));
 app.get('/streams', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const streams = yield db_1.StreamModel.find();
+    const streams = yield db_1.StreamModel.find({}, '-key');
     res.send({
         streams
     });
@@ -60,7 +68,7 @@ app.get('/streams', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 app.get('/stream/:pubkey', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const stream = yield db_1.StreamModel.findOne({
         publicKey: req.params.pubkey
-    });
+    }, '-key');
     res.send({
         stream
     });
@@ -94,11 +102,9 @@ app.get('/following/:publicKey', (req, res) => __awaiter(void 0, void 0, void 0,
         publicKey: req.params.publicKey
     });
     res.json({
-        following: (following) ? following.following : false
+        following: (following) ? following.following : []
     });
 }));
-// app.post('/stream', (req, res) => {
-// });
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         yield mongoose_1.default.connect(process.env.DBURL, {});

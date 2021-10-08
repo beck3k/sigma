@@ -8,8 +8,7 @@ interface Stream {
 const schema = new Schema<Stream>({
   key: {
     required: true,
-    type: String,
-    select: false
+    type: String
   },
   publicKey: {
     require: true,

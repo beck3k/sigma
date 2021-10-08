@@ -6,8 +6,7 @@ var mongoose_1 = require("mongoose");
 var schema = new mongoose_1.Schema({
     key: {
         required: true,
-        type: String,
-        select: false
+        type: String
     },
     publicKey: {
         require: true,
