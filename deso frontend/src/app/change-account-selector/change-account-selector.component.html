@@ -49,6 +49,13 @@
   >
     {{input1}}
   </div>
+  <div
+  *ngIf="input2"
+  class="pl-15px text-link_hover pr-10px pt-10px"
+  (click)="onInput2Click()"
+>
+  {{input2}}
+</div>
     <div
       (click)="globalVars.launchLoginFlow()"
       class="pl-15px text-link_hover pr-10px pt-10px"

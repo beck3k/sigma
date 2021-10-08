@@ -18,11 +18,16 @@ export class ChangeAccountSelectorComponent {
   hoverRow: number;
   @Input() input1
   @Output() input1Click = new EventEmitter();
+  @Input() input2
+  @Output() input2Click = new EventEmitter();
 
   onInput1Click() {
     this.input1Click.emit()
   }
-
+  onInput2Click() {
+    console.log("click received")
+    this.input2Click.emit()
+  }
   constructor(
     public globalVars: GlobalVarsService,
     private renderer: Renderer2,

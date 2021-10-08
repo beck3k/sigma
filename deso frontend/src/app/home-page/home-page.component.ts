@@ -25,18 +25,36 @@ export class HomePageComponent implements OnInit {
     this.followedStreamers()
   }
 
+  goToCreatorDashboard() {
+    this.router.navigate(['dashboard', this.globalVars.loggedInUser.ProfileEntryResponse.Username], {relativeTo: this.route})
+  }
+
+  changeStream(newStreamerPublicKey) {
+    this.backendApi.GetSingleProfile(this.globalVars.localNode, newStreamerPublicKey, "").subscribe(
+      (res) => {
+      if (this.player) {
+        this.player.destroy() 
+      }
+      this.router.navigate([res.Profile.Username],{relativeTo: this.route})})
+  }
+
+  goBackToChannel() {
+    this.router.navigate([`/${this.globalVars.loggedInUser.ProfileEntryResponse.Username}`])
+  }
+
   followedStreamers() {
     this.http.get(`http://149.159.16.161:3123/following/${this.globalVars.loggedInUser.PublicKeyBase58Check}`).subscribe((data)=>{
       this.followedStreamersList=data
       console.log(this.followedStreamersList)
-      this.backendApi.GetSingleProfile(this.globalVars.localNode, this.followedStreamersList[0], "").subscribe(
+      this.backendApi.GetSingleProfile(this.globalVars.localNode, this.followedStreamersList.following[0], "").subscribe(
         (res) => {
           this.streamerProfile = res.Profile;
+          console.log(this.streamerProfile)
           this.http.get(`http://149.159.16.161:3123/stream/${this.streamerProfile.PublicKeyBase58Check}`).subscribe((data)=>{
             this.streamer = data
             this.backendApi.GetSingleProfilePicture(
               this.globalVars.localNode,
-              this.streamer.stream.publicKey,
+              this.streamerProfile.PublicKeyBase58Check,
               this.globalVars.profileUpdateTimestamp ? `?${this.globalVars.profileUpdateTimestamp}` : ""
             )
               .subscribe((res) => {
@@ -47,6 +65,7 @@ export class HomePageComponent implements OnInit {
                 } else {
                   // var loader = XHRLoader;
                 }
+                console.log(this.streamer.stream._id)
                 var engine = new p2pml.hlsjs.Engine();
                 this.player = new Clappr.Player({
                   parentId: "#video",
@@ -82,9 +101,6 @@ export class HomePageComponent implements OnInit {
     }
     )}
 
-  goToCreatorDashboard() {
-    this.router.navigate(['../', 'dashboard', this.globalVars.loggedInUser.ProfileEntryResponse.Username], {relativeTo: this.route})
-  }
 
   _readImageFileToProfilePicInput(file: Blob | File) {
     const reader = new FileReader();

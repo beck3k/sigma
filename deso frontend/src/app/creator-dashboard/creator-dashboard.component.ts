@@ -25,6 +25,10 @@ export class CreatorDashboardComponent implements OnInit {
     })
   }
 
+  goBackToChannel() {
+    this.router.navigate([`/${this.globalVars.loggedInUser.ProfileEntryResponse.Username}`])
+  }
+
   getStreamKey() {
     this.backendApi.GetSingleProfile(this.globalVars.localNode, "", this.streamerUsername).subscribe(
       (res) => {

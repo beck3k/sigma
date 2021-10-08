@@ -16,7 +16,7 @@
           </button>
           <!-- trying to conditionally render signup and login button -->
         </div>
-        <change-account-selector input1="Creator Dashboard" (input1Click)="goToCreatorDashboard()"
+        <change-account-selector input2="Channel" (input2Click)="goBackToChannel()" input1="Creator Dashboard" (input1Click)="goToCreatorDashboard()"
           class="justify-content-sm-end" *ngIf="this.globalVars.loggedInUser"></change-account-selector>
       </div>
     </div>
@@ -24,10 +24,7 @@
       <div class="col-2">
         <p>Following</p>
         <div *ngFor="let streamer of followedStreamersList.following">
-          <div *ngIf="streamer!==this.streamerProfile.PublicKeyBase58Check">
-            <button (click)="changeStream(streamer)">{{streamer}}</button>
-          </div>
-  
+                <button (click)="changeStream(streamer)">{{streamer}}</button>
         </div>
       </div>
       <div class="col-7">

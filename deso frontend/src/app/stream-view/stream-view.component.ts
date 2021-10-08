@@ -42,6 +42,15 @@ export class StreamViewComponent implements OnInit {
 
   }
 
+  redirectToHomePage() {
+    console.log("clicked")
+    this.router.navigate(['/'])
+  }
+
+  goBackToChannel() {
+    this.router.navigate([`/${this.globalVars.loggedInUser.ProfileEntryResponse.Username}`])
+  }
+
   goToCreatorDashboard() {
     this.router.navigate(['../', 'dashboard', this.globalVars.loggedInUser.ProfileEntryResponse.Username], {relativeTo: this.route})
   }
@@ -68,17 +77,19 @@ export class StreamViewComponent implements OnInit {
     this.backendApi.GetSingleProfile(this.globalVars.localNode, "", this.streamerUsername).subscribe(
       (res) => {
         this.streamerProfile = res.Profile;
+        console.log(this.streamerProfile)
         console.log("called")
         this.http.get(`http://149.159.16.161:3123/stream/${this.streamerProfile.PublicKeyBase58Check}`).subscribe((data)=>{
           this.streamer = data
           console.log(this.streamer)
           this.backendApi.GetSingleProfilePicture(
             this.globalVars.localNode,
-            this.streamer.stream.publicKey,
+            this.streamerProfile.PublicKeyBase58Check,
             this.globalVars.profileUpdateTimestamp ? `?${this.globalVars.profileUpdateTimestamp}` : ""
           )
             .subscribe((res) => {
               this._readImageFileToProfilePicInput(res);
+              this.followedStreamers()
               if (p2pml.hlsjs.Engine.isSupported()) {
                 var engine = new p2pml.hlsjs.Engine();
                 var loader = engine.createLoaderClass();
@@ -100,7 +111,7 @@ export class StreamViewComponent implements OnInit {
               });
               if (p2pml.hlsjs.Engine.isSupported()) p2pml.hlsjs.initClapprPlayer(this.player);
               this.player.play(true);
-              this.followedStreamers()
+              console.log("completed")
             });
       },
     );
@@ -121,11 +132,13 @@ export class StreamViewComponent implements OnInit {
   }
 
   _readImageFileToProfilePicInput(file: Blob | File) {
+    console.log("here")
     const reader = new FileReader();
     reader.readAsBinaryString(file);
     reader.onload = (event: any) => {
       const base64Image = btoa(event.target.result);
       this.streamerProfilePicture = `data:${file.type};base64,${base64Image}`;
+      console.log(this.streamerProfilePicture)
     };
   }
 }
