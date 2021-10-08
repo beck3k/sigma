@@ -94,7 +94,7 @@ app.get('/following/:publicKey', (req, res) => __awaiter(void 0, void 0, void 0,
         publicKey: req.params.publicKey
     });
     res.json({
-        following: following.following
+        following: (following) ? following.following : false
     });
 }));
 // app.post('/stream', (req, res) => {
