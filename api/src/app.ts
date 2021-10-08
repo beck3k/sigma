@@ -96,7 +96,7 @@ app.get('/following/:publicKey', async (req, res) => {
   });
 
   res.json({
-    following: following.following
+    following: (following.following) ? following.following : false
   });
 });
 
