@@ -6,6 +6,9 @@ import { SearchBarComponent } from '../search-bar/search-bar.component'
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { BackendApiService } from '../backend-api.service'
+import { OnDestroy, Input } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { WebSocketService, ChatMessageDto } from '../web-socket.service';
 
 declare var p2pml: any;
 declare var Clappr: any;
@@ -15,20 +18,52 @@ declare var Clappr: any;
   templateUrl: './stream-view.component.html',
   styleUrls: ['./stream-view.component.scss']
 })
-export class StreamViewComponent implements OnInit {
+export class StreamViewComponent implements OnInit, OnDestroy {
   streamer // from our backend -- gives stream url so we can play in the video player
   streamerProfile // taken from get-single-profile
   streamerUsername // taken from url
   streamerProfilePicture // taken from get-single-profile-picture
   followedStreamersList
   player
-  constructor(public globalVars: GlobalVarsService, private router: Router, private http: HttpClient, private route: ActivatedRoute, private backendApi: BackendApiService) {
+  chatMessages
+  ngOnDestroy(): void {
+    this.destroy()
+  }
+
+  following = false
+  
+  getChatMessages() {
+    console.log("from websocket messages: ", this.webSocketService.chatMessages)
+    this.chatMessages = this.webSocketService.chatMessages
+  }
+  sendMessage(sendForm: NgForm) {
+    // TODO check if the user is logged in -- only then allow message
+    const chatMessageDto = new ChatMessageDto(this.globalVars.loggedInUser.ProfileEntryResponse.Username, sendForm.value.message);
+    this.webSocketService.sendMessage(chatMessageDto);
+    sendForm.controls.message.reset();
+  }
+
+  unfollowStreamer() {
+    this.following = false
+    console.log("unfollowing")
+    this.http.post(`http://149.159.16.161:3123/unfollow/${this.streamerProfile.PublicKeyBase58Check}`, {publicKey: this.globalVars.loggedInUser.PublicKeyBase58Check}).subscribe((data)=>{})
+  }
+
+  constructor(public webSocketService: WebSocketService, public globalVars: GlobalVarsService, private router: Router, private http: HttpClient, private route: ActivatedRoute, private backendApi: BackendApiService) {
     console.log("constructor called")
    }
    @HostListener('window:popstate', ['$event'])
-   onPopState(event) {
-     this.player.destroy()
+
+   destroy() {
+    this.webSocketService.closeWebSocket()
+    this.player.destroy()
+    this.chatMessages = []
+    this.chatSocket = undefined
    }
+   onPopState(event) {
+     this.destroy()
+   }
+   chatSocket
 
   // get access to streamer public key from param and then query backend for stream and then use user public key to populate following. if public key not found in streams then show page 404. 
   orderby: string;
@@ -37,10 +72,17 @@ export class StreamViewComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       this.streamerUsername = params.get("username")
       this.getStreamer();
+      if (!this.chatSocket) {
+        this.chatSocket = this.webSocketService.openWebSocket(this.streamerUsername)
+        this.getChatMessages()
+        console.log("chat message: ", this.chatMessages)
+      console.log(this.chatSocket)
+      }
     })
 
 
   }
+  
 
   redirectToHomePage() {
     console.log("clicked")
@@ -58,18 +100,21 @@ export class StreamViewComponent implements OnInit {
   changeStream(newStreamerPublicKey) {
     this.backendApi.GetSingleProfile(this.globalVars.localNode, newStreamerPublicKey, "").subscribe(
       (res) => {
-      this.player.destroy()
+      this.destroy()
       this.router.navigate(['../',res.Profile.Username],{relativeTo: this.route})})
   }
 
   followStreamer(){
     console.log("called")
+    this.following = true
     this.http.post(`http://149.159.16.161:3123/follow/${this.streamerProfile.PublicKeyBase58Check}`, {publicKey: this.globalVars.loggedInUser.PublicKeyBase58Check}).subscribe((data)=>{console.log(data)})
   }
 
   followedStreamers() {
     this.http.get(`http://149.159.16.161:3123/following/${this.globalVars.loggedInUser.PublicKeyBase58Check}`).subscribe((data)=>{
       this.followedStreamersList=data
+      this.following = this.followedStreamersList.following.includes(this.streamerProfile.PublicKeyBase58Check)
+      
     })
   }
 
@@ -141,4 +186,6 @@ export class StreamViewComponent implements OnInit {
       console.log(this.streamerProfilePicture)
     };
   }
+
+  
 }

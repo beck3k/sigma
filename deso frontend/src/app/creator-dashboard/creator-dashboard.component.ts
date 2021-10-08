@@ -33,7 +33,8 @@ export class CreatorDashboardComponent implements OnInit {
     this.backendApi.GetSingleProfile(this.globalVars.localNode, "", this.streamerUsername).subscribe(
       (res) => {
         this.streamerProfile = res.Profile;
-        console.log("called")
+        // use logged in user information to avoid server side auth
+        console.log(`http://149.159.16.161:3123/private/stream/${this.streamerProfile.PublicKeyBase58Check}`)
         this.http.get(`http://149.159.16.161:3123/private/stream/${this.streamerProfile.PublicKeyBase58Check}`).subscribe((data: {stream: {streamKey}})=>{this.streamKey = data.stream.streamKey})})}
 
   resetStreamKey() {

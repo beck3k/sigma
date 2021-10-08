@@ -7,7 +7,6 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { TextFieldModule } from "@angular/cdk/text-field";
-
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { BackendApiService } from "./backend-api.service";
@@ -154,7 +153,7 @@ import { ReferralProgramMgrComponent } from "./referral-program-mgr/referral-pro
 import { ReferralsComponent } from "./referrals/referrals.component";
 import { BuyDeSoEthComponent } from "./buy-deso-page/buy-deso-eth/buy-deso-eth.component";
 import { SanitizeVideoUrlPipe } from "../lib/pipes/sanitize-video-url-pipe";
-
+import { WebSocketService } from "./web-socket.service";
 // Modular Themes for DeSo by Carsen Klock @carsenk
 import { ThemeModule } from "./theme/theme.module";
 import { Theme } from "./theme/symbols";
@@ -333,7 +332,7 @@ const greenishTheme: Theme = { key: "greenish", name: "Green Theme" };
         (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark"),
     }),
   ],
-  providers: [BackendApiService, GlobalVarsService, BsModalService, IdentityService],
+  providers: [BackendApiService, GlobalVarsService, BsModalService, IdentityService, WebSocketService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
