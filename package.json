@@ -21,5 +21,10 @@
   "workspaces": [
     "db",
     "api"
-  ]
+  ],
+  "dependencies": {
+    "kafkajs": "^1.15.0",
+    "querystring": "^0.2.1",
+    "ws": "^8.2.3"
+  }
 }
