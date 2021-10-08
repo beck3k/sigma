@@ -27,7 +27,7 @@ app.use((0, cors_1.default)());
 app.get('/', (req, res) => {
     res.send('API Alive');
 });
-app.post('/stream', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+function getKey() {
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var name = "";
     var charactersLength = characters.length;
@@ -35,6 +35,10 @@ app.post('/stream', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         name += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     var key = crypto_js_1.default.SHA256("live/" + name).toString();
+    return key;
+}
+app.post('/stream', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var key = getKey();
     var publicKey = req.body.publicKey;
     var stream = yield db_1.StreamModel.findOneAndUpdate({
         publicKey
@@ -52,11 +56,19 @@ app.post('/stream', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     });
 }));
 app.get('/private/stream/:publicKey', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const stream = yield db_1.StreamModel.findOne({
+    var stream = yield db_1.StreamModel.findOneAndUpdate({
         publicKey: req.params.publicKey
     });
+    if (!stream) {
+        var key = getKey();
+        stream = yield db_1.StreamModel.create({
+            publicKey: req.params.publicKey,
+            key: key
+        });
+        stream.save();
+    }
     res.json({
-        stream
+        stream: Object.assign(Object.assign({}, stream), { streamKey: `${stream._id}?pwd=${stream.key}` })
     });
 }));
 app.get('/streams', (req, res) => __awaiter(void 0, void 0, void 0, function* () {

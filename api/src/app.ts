@@ -50,12 +50,24 @@ app.post('/stream', async (req, res) => {
 });
 
 app.get('/private/stream/:publicKey', async (req, res) => {
-  const stream = await StreamModel.findOneAndUpdate({
+  var stream = await StreamModel.findOneAndUpdate({
     publicKey: req.params.publicKey
   });
 
+  if(!stream) {
+    var key = getKey();
+    stream = await StreamModel.create({
+      publicKey: req.params.publicKey,
+      key: key
+    });
+    stream.save();
+  }
+
   res.json({
-    stream
+    stream: {
+      ...stream,
+      streamKey: `${stream._id}?pwd=${stream.key}`
+    }
   });
 });
 
