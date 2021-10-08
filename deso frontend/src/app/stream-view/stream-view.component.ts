@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { AppRoutingModule } from "../app-routing.module";
 import { GlobalVarsService } from "../global-vars.service";
 import { Router , NavigationExtras} from "@angular/router";
@@ -21,8 +21,13 @@ export class StreamViewComponent implements OnInit {
   streamerUsername // taken from url
   streamerProfilePicture // taken from get-single-profile-picture
   followedStreamersList
+  player
   constructor(public globalVars: GlobalVarsService, private router: Router, private http: HttpClient, private route: ActivatedRoute, private backendApi: BackendApiService) {
-    
+    console.log("constructor called")
+   }
+   @HostListener('window:popstate', ['$event'])
+   onPopState(event) {
+     this.player.destroy()
    }
 
   // get access to streamer public key from param and then query backend for stream and then use user public key to populate following. if public key not found in streams then show page 404. 
@@ -37,10 +42,14 @@ export class StreamViewComponent implements OnInit {
 
   }
 
+  goToCreatorDashboard() {
+    this.router.navigate(['../', 'dashboard', this.globalVars.loggedInUser.ProfileEntryResponse.Username], {relativeTo: this.route})
+  }
+
   changeStream(newStreamerPublicKey) {
     this.backendApi.GetSingleProfile(this.globalVars.localNode, newStreamerPublicKey, "").subscribe(
       (res) => {
-        console.log(res.Profile.Username)
+      this.player.destroy()
       this.router.navigate(['../',res.Profile.Username],{relativeTo: this.route})})
   }
 
@@ -55,16 +64,11 @@ export class StreamViewComponent implements OnInit {
     })
   }
 
-  createStream() {
-    this.http.post("http://149.159.16.161:3123/stream", { username: this.globalVars.loggedInUser.ProfileEntryResponse.Username, publicKey: this.globalVars.loggedInUser.PublicKeyBase58Check }).subscribe((data) => {
-    })
-  }
-
   getStreamer() {
     this.backendApi.GetSingleProfile(this.globalVars.localNode, "", this.streamerUsername).subscribe(
       (res) => {
         this.streamerProfile = res.Profile;
-        
+        console.log("called")
         this.http.get(`http://149.159.16.161:3123/stream/${this.streamerProfile.PublicKeyBase58Check}`).subscribe((data)=>{
           this.streamer = data
           console.log(this.streamer)
@@ -75,7 +79,6 @@ export class StreamViewComponent implements OnInit {
           )
             .subscribe((res) => {
               this._readImageFileToProfilePicInput(res);
-              console.log(res)
               if (p2pml.hlsjs.Engine.isSupported()) {
                 var engine = new p2pml.hlsjs.Engine();
                 var loader = engine.createLoaderClass();
@@ -83,7 +86,7 @@ export class StreamViewComponent implements OnInit {
                 // var loader = XHRLoader;
               }
               var engine = new p2pml.hlsjs.Engine();
-              var player = new Clappr.Player({
+              this.player = new Clappr.Player({
                 parentId: "#video",
                 source: `http://149.159.16.161:8082/live/${this.streamer.stream._id}/index.m3u8`,
                 width: "100%",
@@ -95,8 +98,8 @@ export class StreamViewComponent implements OnInit {
                   }
                 }
               });
-              if (p2pml.hlsjs.Engine.isSupported()) p2pml.hlsjs.initClapprPlayer(player);
-              player.play(true);
+              if (p2pml.hlsjs.Engine.isSupported()) p2pml.hlsjs.initClapprPlayer(this.player);
+              this.player.play(true);
               this.followedStreamers()
             });
       },
