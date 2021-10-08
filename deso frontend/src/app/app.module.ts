@@ -159,6 +159,8 @@ import { SanitizeVideoUrlPipe } from "../lib/pipes/sanitize-video-url-pipe";
 import { ThemeModule } from "./theme/theme.module";
 import { Theme } from "./theme/symbols";
 import { StreamViewComponent } from './stream-view/stream-view.component';
+import { CreatorDashboardComponent } from './creator-dashboard/creator-dashboard.component';
+import { HomePageComponent } from './home-page/home-page.component';
 const lightTheme: Theme = { key: "light", name: "Light Theme" };
 const darkTheme: Theme = { key: "dark", name: "Dark Theme" };
 const icydarkTheme: Theme = { key: "icydark", name: "Icy Dark Theme" };
@@ -298,6 +300,8 @@ const greenishTheme: Theme = { key: "greenish", name: "Green Theme" };
     BuyDeSoEthComponent,
     SanitizeVideoUrlPipe,
     StreamViewComponent,
+    CreatorDashboardComponent,
+    HomePageComponent,
   ],
   imports: [
     BrowserModule,

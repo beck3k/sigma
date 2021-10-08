@@ -37,6 +37,8 @@ import { SellCreatorCoinsTutorialComponent } from "./tutorial/sell-creator-coins
 import { DiamondTutorialPageComponent } from "./tutorial/diamond-tutorial-page/diamond-tutorial-page.component";
 import { CreatePostTutorialPageComponent } from "./tutorial/create-post-tutorial-page/create-post-tutorial-page.component";
 import {StreamViewComponent} from "./stream-view/stream-view.component"
+import { CreatorDashboardComponent } from "./creator-dashboard/creator-dashboard.component";
+import { HomePageComponent } from "./home-page/home-page.component";
 
 class RouteNames {
   // Not sure if we should have a smarter schema for this, e.g. what happens if we have
@@ -85,8 +87,9 @@ class RouteNames {
 }
 
 const routes: Routes = [
-  { path:"", component: LandingPageComponent, pathMatch: "full" },
+  { path: "", component: HomePageComponent, pathMatch: "full" },
   { path: ":username", component: StreamViewComponent, pathMatch: "full" },
+  { path: "dashboard/:username", component: CreatorDashboardComponent, pathMatch: "full"},
   { path: RouteNames.BROWSE, component: BrowsePageComponent, pathMatch: "full" },
   { path: RouteNames.CREATORS, component: CreatorsLeaderboardPageComponent, pathMatch: "full" },
   { path: RouteNames.USER_PREFIX + "/:username", component: CreatorProfilePageComponent, pathMatch: "full" },

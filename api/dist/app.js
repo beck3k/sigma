@@ -19,6 +19,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
+require("./bridge");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = 3123;

@@ -6,6 +6,8 @@ import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 
+import './bridge';
+
 dotenv.config();
 
 const app = express()
@@ -98,7 +100,7 @@ app.post('/follow/:publicKey', async (req, res) => {
   });
   // Check if following already, and push
   const followers = await ViewerModel.updateOne(
-    { 
+    {
       publicKey: req.body.publicKey,
       following: {
         $ne: req.params.publicKey

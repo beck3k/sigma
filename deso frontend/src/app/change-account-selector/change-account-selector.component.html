@@ -43,6 +43,13 @@
       </div>
     </div>
     <div
+    *ngIf="input1"
+    class="pl-15px text-link_hover pr-10px pt-10px"
+    (click)="onInput1Click()"
+  >
+    {{input1}}
+  </div>
+    <div
       (click)="globalVars.launchLoginFlow()"
       class="pl-15px text-link_hover pr-10px pt-10px"
     >
