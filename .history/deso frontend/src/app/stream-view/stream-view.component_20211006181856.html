@@ -1,0 +1,54 @@
+<!-- get access to price of creator -->
+
+<div class="container-fluid">
+    <br>
+    <div class="row">
+        <div class="col-3"><img src="../../assets/img/sigma-3149984-2623137.png" alt="Logo" width=40></div>
+        <div class="col-5">
+            <search-bar></search-bar>
+          </div>
+          <div class="col-4">
+            <!-- <simple-profile-card #loggedIn [profile]="globalVars.loggedInUser.PublicKeyBase58Check"></simple-profile-card> -->
+            <div *ngIf="!this.globalVars.loggedInUser" class="w-100 align-items-center justify-content-center">
+                <button (click)="globalVars.launchSignupFlow()">
+                  Sign Up
+                </button>
+                <button (click)="globalVars.launchSignupFlow()" class="ml-2">
+                    Login
+                </button>
+                <!-- trying to conditionally render signup and login button -->
+            </div>
+            <change-account-selector class="justify-content-sm-end" *ngIf="this.globalVars.loggedInUser"></change-account-selector>
+          </div>
+    </div>
+    <div class="row">
+          <div class="col-2">
+            <p>Following</p>
+          </div>
+          <div class="col-7">
+            <h6>stream and about</h6>
+            <div id="video"></div>
+            <div class="player"></div>
+            <div class="row">row</div>
+          </div>
+          <div class="col-3">
+            <h6>chat</h6>
+          </div>
+
+
+      </div>
+      <button (click)="createStream()">Create Stream</button>
+
+      <br>
+      <br>
+      <br>
+      <update-profile [loggedInUser]="globalVars.loggedInUser" [inTutorial]="false"></update-profile>
+
+      <!-- check out following and make it such that u click on user and it comes -->
+
+</div>
+
+
+
+
+
