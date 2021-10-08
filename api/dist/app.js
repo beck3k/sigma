@@ -17,13 +17,17 @@ const db_1 = require("db");
 const crypto_js_1 = __importDefault(require("crypto-js"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const body_parser_1 = __importDefault(require("body-parser"));
+const cors_1 = __importDefault(require("cors"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = 3123;
+app.use(body_parser_1.default.json());
+app.use((0, cors_1.default)());
 app.get('/', (req, res) => {
     res.send('API Alive');
 });
-app.get('/stream', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post('/stream', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var name = "";
     var charactersLength = characters.length;
@@ -31,20 +35,66 @@ app.get('/stream', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         name += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     var key = crypto_js_1.default.SHA256("live/" + name).toString();
-    var stream = new db_1.StreamModel({
-        name,
+    var publicKey = req.body.publicKey;
+    var stream = yield db_1.StreamModel.findOneAndUpdate({
+        publicKey
+    }, {
         key
+    }, {
+        new: true,
+        upsert: true
     });
     stream.save();
     res.send({
-        name,
-        key
+        _id: stream._id,
+        key,
+        streamKey: `${stream._id}?pwd=${key}`
     });
 }));
 app.get('/streams', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const streams = yield db_1.StreamModel.find();
     res.send({
         streams
+    });
+}));
+app.get('/stream/:pubkey', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const stream = yield db_1.StreamModel.findOne({
+        publicKey: req.params.pubkey
+    });
+    res.send({
+        stream
+    });
+}));
+// PublicKey is of the streamer
+app.post('/follow/:publicKey', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // Check that viewer exists
+    yield db_1.ViewerModel.findOneAndUpdate({
+        publicKey: req.body.publicKey
+    }, {}, {
+        upsert: true
+    });
+    // Check if following already, and push
+    const followers = yield db_1.ViewerModel.updateOne({
+        publicKey: req.body.publicKey,
+        following: {
+            $ne: req.params.publicKey
+        }
+    }, {
+        $push: {
+            following: req.params.publicKey
+        },
+    });
+    res.json({
+        followers
+    });
+}));
+// Public key is of the viewer, will not be required after Auth implemented
+app.get('/following/:publicKey', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const following = yield db_1.ViewerModel.findOne({
+        publicKey: req.params.publicKey
+    });
+    res.json({
+        following: following.following
     });
 }));
 // app.post('/stream', (req, res) => {

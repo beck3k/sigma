@@ -4,12 +4,13 @@ exports.StreamModel = void 0;
 var mongoose_1 = require("mongoose");
 ;
 var schema = new mongoose_1.Schema({
-    name: {
-        required: true,
-        type: String
-    },
     key: {
         required: true,
+        type: String,
+        select: false
+    },
+    publicKey: {
+        require: true,
         type: String
     }
 });

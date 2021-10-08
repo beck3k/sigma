@@ -1,6 +1,9 @@
 import { Stream, StreamModel } from './stream';
+import { Viewer, ViewerModel} from './viewers';
 
 export {
   Stream,
-  StreamModel
+  StreamModel,
+  Viewer,
+  ViewerModel
 };

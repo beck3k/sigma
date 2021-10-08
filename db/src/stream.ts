@@ -1,17 +1,18 @@
 import { Schema, model } from 'mongoose';
 
 interface Stream {
-  name: string;
   key: string;
+  publicKey: string;
 };
 
 const schema = new Schema<Stream>({
-  name: {
-    required: true,
-    type: String
-  },
   key: {
     required: true,
+    type: String,
+    select: false
+  },
+  publicKey: {
+    require: true,
     type: String
   }
 });
