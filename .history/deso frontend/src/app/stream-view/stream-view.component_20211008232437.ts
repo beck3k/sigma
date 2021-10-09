@@ -29,7 +29,7 @@ export class StreamViewComponent implements OnInit, OnDestroy {
   streamTitle
   streamDescription
   streamCategory
-  isStreamerLive
+
   ngOnDestroy(): void {
     this.destroy()
   }
@@ -72,7 +72,6 @@ export class StreamViewComponent implements OnInit, OnDestroy {
   // get access to streamer public key from param and then query backend for stream and then use user public key to populate following. if public key not found in streams then show page 404. 
   orderby: string;
   ngOnInit(): void {
-    console.log('init called to destoy')
     this.globalVars._updateDeSoExchangeRate()
     this.route.paramMap.subscribe(params => {
       this.streamerUsername = params.get("username")
@@ -84,16 +83,11 @@ export class StreamViewComponent implements OnInit, OnDestroy {
   
 
   redirectToHomePage() {
-    // this.destroy()
     console.log("clicked")
     this.router.navigate(['/'])
   }
 
   goBackToChannel() {
-    if (this.globalVars.loggedInUser.ProfileEntryResponse.Username===this.streamerUsername){
-      return
-    }
-    this.destroy()
     this.router.navigate([`/${this.globalVars.loggedInUser.ProfileEntryResponse.Username}`])
   }
 
@@ -122,31 +116,22 @@ export class StreamViewComponent implements OnInit, OnDestroy {
     })
   }
 
-  onAccountChange() {
-    this.destroy()
-    this.getStreamer()
-  }
-
   getStreamer() {
     this.backendApi.GetSingleProfile(this.globalVars.localNode, "", this.streamerUsername).subscribe(
       (res) => {
         this.streamerProfile = res.Profile;
-        if (!this.chatSocket) {
-          this.chatSocket = this.webSocketService.openWebSocket(this.streamerProfile.PublicKeyBase58Check)
-          this.getChatMessages()
-        }
-        this.http.get(`http://149.159.16.161:3123/stream/${this.streamerProfile.PublicKeyBase58Check}`).subscribe((data)=>{
-          // this.http.get(`http://149.159.16.161:3123/stream/${this.streamerProfile.PublicKeyBase58Check}/info`).subscribe((data: { stream: { category, description, title } }) => {
-          //   this.streamCategory = data.stream.category
-          //   this.streamDescription = data.stream.description
-          //   this.streamTitle = data.stream.title
-          // })
-          this.streamer = data
-          this.streamDescription = this.streamer.stream.description
-          this.streamTitle = this.streamer.stream.title
-          this.streamCategory = this.streamer.stream.category
-          this.isStreamerLive = this.streamer.stream.isLive
-          console.log(this.isStreamerLive)
+        console.log(this.streamerProfile)
+        // if (!this.chatSocket) {
+        //   this.chatSocket = this.webSocketService.openWebSocket(this.streamerProfile.PublicKeyBase58Check)
+        //   this.getChatMessages()
+        // }
+        this.http.get(`http://149.159.16.161:3123/stream/${this.streamerProfile.PublicKeyBase58Check}`).subscribe((data: {stream: {streamKey, _doc: {category, title, description}}})=>{
+        this.http.get(`http://149.159.16.161:3123/stream/${this.streamerProfile.PublicKeyBase58Check}/info`).subscribe((data)=>{
+          this.streamCategory = data.stream.category
+          this.streamDescription = data.stream.description
+          this.streamTitle = data.stream.title
+        })
+        this.streamer = data
           console.log(this.streamer)
           this.backendApi.GetSingleProfilePicture(
             this.globalVars.localNode,

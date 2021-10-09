@@ -44,8 +44,8 @@ export class CreatorDashboardComponent implements OnInit {
     this.http.post(`http://149.159.16.161:3123/stream/${this.streamerProfile.PublicKeyBase58Check}/info`, {
       category: this.streamCategory,
       title: this.streamTitle,
-      description: this.streamDescription
-    }).subscribe((data)=>{console.log(data)})
+      descriptoin: this.streamDescription
+    })
     console.log(this.streamTitle, this.streamDescription, this.streamCategory)
   }
 

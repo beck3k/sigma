@@ -20,7 +20,6 @@ export class ChangeAccountSelectorComponent {
   @Output() input1Click = new EventEmitter();
   @Input() input2
   @Output() input2Click = new EventEmitter();
-  @Output() accountChanged = new EventEmitter()
 
   onInput1Click() {
     this.input1Click.emit()
@@ -66,11 +65,14 @@ export class ChangeAccountSelectorComponent {
   _switchToUser(user) {
     this.globalVars.setLoggedInUser(user);
     this.globalVars.messageResponse = null;
-    this.accountChanged.emit()
 
     // Now we call update everything on the newly logged in user to make sure we have the latest info this user.
     this.globalVars.updateEverything().add(() => {
       if (!this.globalVars.userInTutorial(this.globalVars.loggedInUser)) {
+        const currentUrl = this.router.url;
+        this.router.navigate(["/" + this.globalVars.RouteNames.BROWSE]).then(() => {
+          this.router.navigateByUrl(currentUrl);
+        });
       }
       this.globalVars.isLeftBarMobileOpen = false;
     });

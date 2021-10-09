@@ -72,7 +72,6 @@ export class StreamViewComponent implements OnInit, OnDestroy {
   // get access to streamer public key from param and then query backend for stream and then use user public key to populate following. if public key not found in streams then show page 404. 
   orderby: string;
   ngOnInit(): void {
-    console.log('init called to destoy')
     this.globalVars._updateDeSoExchangeRate()
     this.route.paramMap.subscribe(params => {
       this.streamerUsername = params.get("username")
@@ -84,16 +83,11 @@ export class StreamViewComponent implements OnInit, OnDestroy {
   
 
   redirectToHomePage() {
-    // this.destroy()
     console.log("clicked")
     this.router.navigate(['/'])
   }
 
   goBackToChannel() {
-    if (this.globalVars.loggedInUser.ProfileEntryResponse.Username===this.streamerUsername){
-      return
-    }
-    this.destroy()
     this.router.navigate([`/${this.globalVars.loggedInUser.ProfileEntryResponse.Username}`])
   }
 
@@ -122,12 +116,8 @@ export class StreamViewComponent implements OnInit, OnDestroy {
     })
   }
 
-  onAccountChange() {
-    this.destroy()
-    this.getStreamer()
-  }
-
   getStreamer() {
+    console.log(this.globalVars.loggedInUser)
     this.backendApi.GetSingleProfile(this.globalVars.localNode, "", this.streamerUsername).subscribe(
       (res) => {
         this.streamerProfile = res.Profile;

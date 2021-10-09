@@ -18,7 +18,7 @@
                 </button>
                 <!-- trying to conditionally render signup and login button -->
             </div>
-            <change-account-selector (accountChanged)="onAccountChange()" input2="Channel" (input2Click)="goBackToChannel()" input1="Creator Dashboard" (input1Click)="goToCreatorDashboard()" class="justify-content-sm-end" *ngIf="this.globalVars.loggedInUser"></change-account-selector>
+            <change-account-selector  class="justify-content-sm-end" *ngIf="this.globalVars.loggedInUser"></change-account-selector>
           </div>
     </div>
     <div class="row">

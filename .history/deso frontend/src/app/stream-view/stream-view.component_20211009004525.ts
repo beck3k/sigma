@@ -123,8 +123,7 @@ export class StreamViewComponent implements OnInit, OnDestroy {
   }
 
   onAccountChange() {
-    this.destroy()
-    this.getStreamer()
+    // this.destroy()
   }
 
   getStreamer() {

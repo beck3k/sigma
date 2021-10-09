@@ -90,9 +90,6 @@ export class StreamViewComponent implements OnInit, OnDestroy {
   }
 
   goBackToChannel() {
-    if (this.globalVars.loggedInUser.ProfileEntryResponse.Username===this.streamerUsername){
-      return
-    }
     this.destroy()
     this.router.navigate([`/${this.globalVars.loggedInUser.ProfileEntryResponse.Username}`])
   }
@@ -124,7 +121,6 @@ export class StreamViewComponent implements OnInit, OnDestroy {
 
   onAccountChange() {
     this.destroy()
-    this.getStreamer()
   }
 
   getStreamer() {

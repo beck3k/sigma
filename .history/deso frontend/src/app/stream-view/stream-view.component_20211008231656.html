@@ -18,7 +18,7 @@
                 </button>
                 <!-- trying to conditionally render signup and login button -->
             </div>
-            <change-account-selector (accountChanged)="onAccountChange()" input2="Channel" (input2Click)="goBackToChannel()" input1="Creator Dashboard" (input1Click)="goToCreatorDashboard()" class="justify-content-sm-end" *ngIf="this.globalVars.loggedInUser"></change-account-selector>
+            <change-account-selector input2="Channel" (input2Click)="goBackToChannel()" input1="Creator Dashboard" (input1Click)="goToCreatorDashboard()" class="justify-content-sm-end" *ngIf="this.globalVars.loggedInUser"></change-account-selector>
           </div>
     </div>
     <div class="row">
@@ -42,7 +42,6 @@
                 <div class="row">{{this.streamerProfile.Username}}</div>
                 <div class="row">{{this.streamTitle}}</div>
                 <div class="row">{{this.streamDescription}}</div>
-                <div class="row">Streamer Live: {{this.isStreamerLive}}</div>
                 <p>Viewer Count: {{this.streamer.stream.viewerCount + 1}}</p>
                 <creator-profile-top-card
                 *ngIf="streamerProfile"
