@@ -122,37 +122,17 @@
                     <p *ngIf="streamKey">Stream Key: {{streamKey}}</p>
                 </div>
 
-                <br>
-                <br>
-
-                <form #streamInfoForm="ngForm" (ngSubmit)="updateStreamInfo()">
+                <form>
                     <div class="form-group">
                         <label for="streamTitle">Stream Title</label>
-                        <input type="text" class="form-control" id="streamTitle" required [(ngModel)]="streamTitle"
-                            name="streamTitle">
-                        
-                        
-                    </div>
-                    <div class="form-group">
-                        <label for="streamDescription">Stream Description</label>
-                        <input type="text" class="form-control" id="streamDescription" required [(ngModel)]="streamDescription"
-                            name="streamDescription">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="streamCategory">Select Category</label>
-                        <select class="form-control selectpicker"  id="streamCategory"
-                                required
-                                [(ngModel)]="streamCategory" name="power" data-live-search="true">
-                          <option [data-tokens]="category.name" *ngFor="let category of categories" [value]="category.name">{{category.name}}</option>
-                        </select>
-                    </div>
-
-                    <button type="submit" class="btn btn-success" [disabled]="!streamInfoForm.form.valid">Submit</button>
+                        <input type="text" class="form-control" id="streamTitle"
+                               required
+                               [(ngModel)]="streamTitle" name="streamTitle">
+                      </div>
+                    <input type="text" class="form-control" id="streamTitle" required [(ngModel)]="streamTitle" name="streamTitle">
+                    TODO: remove this: {{streamTitle}}
                 </form>
 
-                <br>
-                <br>
 
                 <creator-profile-top-card *ngIf="streamerProfile" [profile]="streamerProfile"
                     (userUnblocked)="unblockUser()" (userBlocked)="blockUser()"></creator-profile-top-card>

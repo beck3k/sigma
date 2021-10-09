@@ -14,6 +14,7 @@ export class CreatorDashboardComponent implements OnInit {
 
   constructor(public globalVars: GlobalVarsService, private http: HttpClient, private router: Router, private route: ActivatedRoute, private backendApi: BackendApiService) { }
   streamKey
+  name
   streamerUsername
   streamTitle
   streamDescription
@@ -40,23 +41,13 @@ export class CreatorDashboardComponent implements OnInit {
     this.router.navigate([`/${this.globalVars.loggedInUser.ProfileEntryResponse.Username}`])
   }
 
-  updateStreamInfo() {
-    console.log(this.streamTitle, this.streamDescription, this.streamCategory)
-  }
-
   getStreamKey() {
     this.backendApi.GetSingleProfile(this.globalVars.localNode, "", this.streamerUsername).subscribe(
       (res) => {
         this.streamerProfile = res.Profile;
         // use logged in user information to avoid server side auth
         console.log(`http://149.159.16.161:3123/private/stream/${this.streamerProfile.PublicKeyBase58Check}`)
-        this.http.get(`http://149.159.16.161:3123/private/stream/${this.streamerProfile.PublicKeyBase58Check}`).subscribe((data: {stream: {streamKey, _doc: {category, title, description}}})=>{
-          console.log(data)
-          this.streamCategory = data.stream._doc.category
-          this.streamDescription = data.stream._doc.description
-          this.streamTitle = data.stream._doc.title
-
-          this.streamKey = data.stream.streamKey})})}
+        this.http.get(`http://149.159.16.161:3123/private/stream/${this.streamerProfile.PublicKeyBase58Check}`).subscribe((data: {stream: {streamKey}})=>{this.streamKey = data.stream.streamKey})})}
 
   resetStreamKey() {
     this.http.post("http://149.159.16.161:3123/stream", { username: this.globalVars.loggedInUser.ProfileEntryResponse.Username, publicKey: this.globalVars.loggedInUser.PublicKeyBase58Check }).subscribe((data: {streamKey}) => {

@@ -125,11 +125,11 @@
                 <br>
                 <br>
 
-                <form #streamInfoForm="ngForm" (ngSubmit)="updateStreamInfo()">
+                <form #streamInfoForm="ngForm">
                     <div class="form-group">
                         <label for="streamTitle">Stream Title</label>
                         <input type="text" class="form-control" id="streamTitle" required [(ngModel)]="streamTitle"
-                            name="streamTitle">
+                            name="streamTitle" #power="ngModel">
                         
                         
                     </div>
@@ -147,8 +147,6 @@
                           <option [data-tokens]="category.name" *ngFor="let category of categories" [value]="category.name">{{category.name}}</option>
                         </select>
                     </div>
-
-                    <button type="submit" class="btn btn-success" [disabled]="!streamInfoForm.form.valid">Submit</button>
                 </form>
 
                 <br>

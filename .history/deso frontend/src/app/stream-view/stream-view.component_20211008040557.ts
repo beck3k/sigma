@@ -72,6 +72,12 @@ export class StreamViewComponent implements OnInit, OnDestroy {
     this.route.paramMap.subscribe(params => {
       this.streamerUsername = params.get("username")
       this.getStreamer();
+      if (!this.chatSocket) {
+        this.chatSocket = this.webSocketService.openWebSocket(this.streamerUsername)
+        this.getChatMessages()
+        console.log("chat message: ", this.chatMessages)
+      console.log(this.chatSocket)
+      }
     })
 
 
@@ -116,12 +122,11 @@ export class StreamViewComponent implements OnInit, OnDestroy {
     this.backendApi.GetSingleProfile(this.globalVars.localNode, "", this.streamerUsername).subscribe(
       (res) => {
         this.streamerProfile = res.Profile;
-        if (!this.chatSocket) {
-          this.chatSocket = this.webSocketService.openWebSocket(this.streamerProfile.PublicKeyBase58Check)
-          this.getChatMessages()
-        }
+        console.log(this.streamerProfile)
+        console.log("called")
         this.http.get(`http://149.159.16.161:3123/stream/${this.streamerProfile.PublicKeyBase58Check}`).subscribe((data)=>{
           this.streamer = data
+          console.log(this.streamer)
           this.backendApi.GetSingleProfilePicture(
             this.globalVars.localNode,
             this.streamerProfile.PublicKeyBase58Check,

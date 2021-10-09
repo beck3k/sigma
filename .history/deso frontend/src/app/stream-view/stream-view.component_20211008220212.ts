@@ -122,6 +122,7 @@ export class StreamViewComponent implements OnInit, OnDestroy {
         }
         this.http.get(`http://149.159.16.161:3123/stream/${this.streamerProfile.PublicKeyBase58Check}`).subscribe((data)=>{
           this.streamer = data
+          console.log(this.streamer.stream.viewerCount)
           this.backendApi.GetSingleProfilePicture(
             this.globalVars.localNode,
             this.streamerProfile.PublicKeyBase58Check,

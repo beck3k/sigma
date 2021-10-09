@@ -41,7 +41,7 @@ export class CreatorDashboardComponent implements OnInit {
   }
 
   updateStreamInfo() {
-    console.log(this.streamTitle, this.streamDescription, this.streamCategory)
+    console.log(this.streamTitle, this.streamDescription, this.streamDescription)
   }
 
   getStreamKey() {
@@ -50,12 +50,8 @@ export class CreatorDashboardComponent implements OnInit {
         this.streamerProfile = res.Profile;
         // use logged in user information to avoid server side auth
         console.log(`http://149.159.16.161:3123/private/stream/${this.streamerProfile.PublicKeyBase58Check}`)
-        this.http.get(`http://149.159.16.161:3123/private/stream/${this.streamerProfile.PublicKeyBase58Check}`).subscribe((data: {stream: {streamKey, _doc: {category, title, description}}})=>{
+        this.http.get(`http://149.159.16.161:3123/private/stream/${this.streamerProfile.PublicKeyBase58Check}`).subscribe((data: {stream: {streamKey}})=>{
           console.log(data)
-          this.streamCategory = data.stream._doc.category
-          this.streamDescription = data.stream._doc.description
-          this.streamTitle = data.stream._doc.title
-
           this.streamKey = data.stream.streamKey})})}
 
   resetStreamKey() {

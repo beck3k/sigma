@@ -125,13 +125,11 @@
                 <br>
                 <br>
 
-                <form #streamInfoForm="ngForm" (ngSubmit)="updateStreamInfo()">
+                <form>
                     <div class="form-group">
                         <label for="streamTitle">Stream Title</label>
                         <input type="text" class="form-control" id="streamTitle" required [(ngModel)]="streamTitle"
                             name="streamTitle">
-                        
-                        
                     </div>
                     <div class="form-group">
                         <label for="streamDescription">Stream Description</label>
@@ -148,7 +146,14 @@
                         </select>
                     </div>
 
-                    <button type="submit" class="btn btn-success" [disabled]="!streamInfoForm.form.valid">Submit</button>
+                    <select class="mdb-select md-form" searchable="Search here..">
+                        <option value="" disabled selected>Choose your country</option>
+                        <option value="1">USA</option>
+                        <option value="2">Germany</option>
+                        <option value="3">France</option>
+                        <option value="3">Poland</option>
+                        <option value="3">Japan</option>
+                      </select>
                 </form>
 
                 <br>

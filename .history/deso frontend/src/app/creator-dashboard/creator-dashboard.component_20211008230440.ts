@@ -41,7 +41,7 @@ export class CreatorDashboardComponent implements OnInit {
   }
 
   updateStreamInfo() {
-    console.log(this.streamTitle, this.streamDescription, this.streamCategory)
+    console.log(this.streamTitle, this.streamDescription, this.streamDescription)
   }
 
   getStreamKey() {

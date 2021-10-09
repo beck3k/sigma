@@ -119,9 +119,11 @@ export class StreamViewComponent implements OnInit, OnDestroy {
         if (!this.chatSocket) {
           this.chatSocket = this.webSocketService.openWebSocket(this.streamerProfile.PublicKeyBase58Check)
           this.getChatMessages()
-        }
+          console.log("chat message: ", this.chatMessages)
+        console.log("called")
         this.http.get(`http://149.159.16.161:3123/stream/${this.streamerProfile.PublicKeyBase58Check}`).subscribe((data)=>{
           this.streamer = data
+          console.log(this.streamer)
           this.backendApi.GetSingleProfilePicture(
             this.globalVars.localNode,
             this.streamerProfile.PublicKeyBase58Check,
