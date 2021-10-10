@@ -50,8 +50,8 @@ export class CreatorDashboardComponent implements OnInit {
       (res) => {
         this.streamerProfile = res.Profile;
         // use logged in user information to avoid server side auth
-        console.log(`http://149.159.16.161:3123/private/stream/${this.streamerProfile.PublicKeyBase58Check}`)
-        this.http.get(`http://149.159.16.161:3123/private/stream/${this.streamerProfile.PublicKeyBase58Check}`).subscribe((data: {stream: {streamKey, _doc: {category, title, description}}})=>{
+        console.log(`http://149.159.16.161:3123/private/stream/${this.globalVars.loggedInUser.PublicKeyBase58Check}`)
+        this.backendApi.jwtGet('http://149.159.16.161:3123/', `private/stream/${this.streamerProfile.PublicKeyBase58Check}`,this.streamerProfile.PublicKeyBase58Check).subscribe((data: {stream: {streamKey, _doc: {category, title, description}}})=>{
           console.log(data)
           this.streamCategory = data.stream._doc.category
           this.streamDescription = data.stream._doc.description
