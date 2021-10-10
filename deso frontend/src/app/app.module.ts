@@ -1,4 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatSelectModule } from "@angular/material/select";
@@ -160,6 +161,7 @@ import { Theme } from "./theme/symbols";
 import { StreamViewComponent } from './stream-view/stream-view.component';
 import { CreatorDashboardComponent } from './creator-dashboard/creator-dashboard.component';
 import { HomePageComponent } from './home-page/home-page.component';
+import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 const lightTheme: Theme = { key: "light", name: "Light Theme" };
 const darkTheme: Theme = { key: "dark", name: "Dark Theme" };
 const icydarkTheme: Theme = { key: "icydark", name: "Icy Dark Theme" };
@@ -301,9 +303,11 @@ const greenishTheme: Theme = { key: "greenish", name: "Green Theme" };
     StreamViewComponent,
     CreatorDashboardComponent,
     HomePageComponent,
+    UserDashboardComponent,
   ],
   imports: [
     BrowserModule,
+    ClipboardModule,
     DragDropModule,
     AppRoutingModule,
     FormsModule,
