@@ -27,7 +27,7 @@ export class HomePageComponent implements OnInit {
   anyoneLive = false
   streamNumber
   ngOnInit(): void {
-    this.followedStreamers()
+    this.followedStreamers();
   }
 
   goToCreatorDashboard() {

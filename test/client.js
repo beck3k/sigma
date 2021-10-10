@@ -1,10 +1,10 @@
 const WebSocket = require('ws');
 
-const ws = new WebSocket('ws://127.0.0.1:8069/chat/shit');
+const ws = new WebSocket('ws://149.159.16.161:8069/chat/BC1YLj4aFMVM1g44wBgibYq8dFQ1NxTCpQFyJnNMqGqmyUt9zDVjZ5L');
 
 ws.on('open', function open() {
   const msg = {
-    username: Math.random(),
+    user: `${Math.random()}`,
     message: 'Hello world'
   }
   ws.send(JSON.stringify(msg));

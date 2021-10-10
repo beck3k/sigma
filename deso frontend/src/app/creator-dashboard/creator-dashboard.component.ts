@@ -65,7 +65,7 @@ export class CreatorDashboardComponent implements OnInit {
 
   resetStreamKey() {
     this.http.post("http://149.159.16.161:3123/stream", { username: this.globalVars.loggedInUser.ProfileEntryResponse.Username, publicKey: this.globalVars.loggedInUser.PublicKeyBase58Check }).subscribe((data: {streamKey}) => {
-    console.log(data)  
+    console.log(data)
     this.streamKey=data.streamKey
   console.log(this.streamKey)})
     }

@@ -21,8 +21,8 @@ async function addClient(ws, topic) {
   });
 
   ws.on('message', (m) => {
+    topics[topic].messages.push(m);
     topics[topic].clients.forEach((socket) => {
-      topics[topic].messages.push(m);
       socket.send(m);
     });
   });
