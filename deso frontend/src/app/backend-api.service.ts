@@ -511,8 +511,7 @@ export class BackendApiService {
 
     return request.pipe(
       switchMap((signed) => {
-
-        return this.httpClient.get<any>(this._makeRequestURL(endpoint, path), { headers: { 'Authorization': signed.jwt, 'PublicKeyBase58Check': publicKey + 'break' } }).pipe(catchError(this._handleError));
+        return this.httpClient.get<any>(this._makeRequestURL(endpoint, path), { headers: { 'Authorization': signed.jwt, 'PublicKeyBase58Check': publicKey } }).pipe(catchError(this._handleError));
       })
     );
   }
