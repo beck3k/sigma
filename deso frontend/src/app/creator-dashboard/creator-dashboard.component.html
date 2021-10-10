@@ -16,7 +16,7 @@
                 <!-- trying to conditionally render signup and login button -->
             </div>
             <change-account-selector [channel]="true" [backToSigma]="true" [settings]="true"
-                class="flex-end justify-content-sm-end" *ngIf="this.globalVars.loggedInUser"></change-account-selector>
+                class="flex-end justify-content-sm-end" *ngIf="this.globalVars.loggedInUser" (accountChanged)="onAccountChange()"></change-account-selector>
         </div>
     </div>
     <!-- <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
@@ -115,7 +115,7 @@
                 </div>
             </nav>
 
-            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <main *ngIf="globalVars.loggedInUser" role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
                 <div>
                     <button (click)="resetStreamKey()">Reset Stream Key</button>
                     <p *ngIf="streamKey">Stream Key: {{streamKey}}</p>
@@ -144,7 +144,7 @@
                         <select class="form-control selectpicker" id="streamCategory" required
                             [(ngModel)]="streamCategory" name="power" data-live-search="true">
                             <option [data-tokens]="category.name" *ngFor="let category of categories"
-                                [value]="category.name">{{category.name}}</option>
+                                [value]="category._id">{{category.name}}</option>
                         </select>
                     </div>
 
@@ -155,7 +155,7 @@
                 <br>
                 <br>
 
-                <creator-profile-top-card *ngIf="streamerProfile" [profile]="streamerProfile"
+                <creator-profile-top-card *ngIf="this.globalVars.loggedInUser.ProfileEntryResponse" [profile]="this.globalVars.loggedInUser.ProfileEntryResponse"
                     (userUnblocked)="unblockUser()" (userBlocked)="blockUser()"></creator-profile-top-card>
             </main>
 

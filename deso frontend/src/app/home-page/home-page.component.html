@@ -19,14 +19,20 @@
             <button (click)="followStreamer()"
               *ngIf="this.globalVars.loggedInUser.ProfileEntryResponse.Username!=this.streamerUsername">Follow</button>
           </div>
-
         </div>
+        <div *ngFor="let category of categories"><button (click)="goToCategory(category._id)">{{category.name}}</button><br></div>
       </div>
     </div>
-
-    <div *ngIf="!anyoneLive">
+    <br>
+    <div *ngIf="!anyoneLive" class="col-7">
       <p>No one is Live right now. Be the First to Go Live!</p>
       <button (click)="goLive()"> Go Live!</button>
+      <br>
+      <br>
+      <div *ngFor="let category of categories"><button (click)="goToCategory(category._id)">{{category.name}}</button> <br></div>
     </div>
+
+    <br>
+
   </div>
 </app-page>

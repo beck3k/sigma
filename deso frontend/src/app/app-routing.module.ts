@@ -40,6 +40,7 @@ import {StreamViewComponent} from "./stream-view/stream-view.component"
 import { CreatorDashboardComponent } from "./creator-dashboard/creator-dashboard.component";
 import { HomePageComponent } from "./home-page/home-page.component";
 import { UserDashboardComponent } from "./user-dashboard/user-dashboard.component";
+import { CategoryViewComponent } from "./category-view/category-view.component";
 
 class RouteNames {
   // Not sure if we should have a smarter schema for this, e.g. what happens if we have
@@ -90,7 +91,8 @@ class RouteNames {
 const routes: Routes = [
   { path: "", component: HomePageComponent, pathMatch: "full" },
   { path: "settings", component: UserDashboardComponent, pathMatch: "full"},
-  { path: "dashboard/:username", component: CreatorDashboardComponent, pathMatch: "full"},
+  { path: "dashboard", component: CreatorDashboardComponent, pathMatch: "full"},
+  { path: "category/:category", component: CategoryViewComponent, pathMatch: "full"},
   { path: RouteNames.BROWSE, component: BrowsePageComponent, pathMatch: "full" },
   { path: RouteNames.CREATORS, component: CreatorsLeaderboardPageComponent, pathMatch: "full" },
   { path: RouteNames.USER_PREFIX + "/:username", component: CreatorProfilePageComponent, pathMatch: "full" },
@@ -168,7 +170,7 @@ const routes: Routes = [
     component: CreatePostTutorialPageComponent,
     pathMatch: "full",
   },
-  { path: ":username", component: StreamViewComponent, pathMatch: "full" },
+  { path: ":publicKey", component: StreamViewComponent, pathMatch: "full" },
   // This NotFound route must be the last one as it catches all paths that were not matched above.
   { path: "**", component: NotFoundPageComponent, pathMatch: "full" },
 ];

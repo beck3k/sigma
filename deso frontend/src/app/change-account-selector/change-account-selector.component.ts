@@ -21,7 +21,6 @@ export class ChangeAccountSelectorComponent {
   @Input() backToSigma
   @Input() channel
   @Output() accountChanged = new EventEmitter()
-
   constructor(
     public globalVars: GlobalVarsService,
     private renderer: Renderer2,
@@ -71,11 +70,11 @@ export class ChangeAccountSelectorComponent {
   }
 
   goToCreatorDashboard() {
-    this.router.navigate(['dashboard', this.globalVars.loggedInUser.ProfileEntryResponse.Username])
+    this.router.navigate(['dashboard'])
   }
 
   goToChannel() {
-    this.router.navigate([`/${this.globalVars.loggedInUser.ProfileEntryResponse.Username}`])
+    this.router.navigate([`/${this.globalVars.loggedInUser.PublicKeyBase58Check}`])
   }
 
   goToSigma() {

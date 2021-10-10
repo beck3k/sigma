@@ -20,4 +20,8 @@ export class UserDashboardComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  onAccountChange() {
+    this.ngOnInit
+  }
+
 }

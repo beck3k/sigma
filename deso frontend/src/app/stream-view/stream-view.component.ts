@@ -27,6 +27,7 @@ export class StreamViewComponent implements OnInit, OnDestroy {
   player
   chatMessages
   streamTitle
+  streamerPublicKey
   streamDescription
   streamCategory
   isStreamerLive
@@ -50,7 +51,7 @@ export class StreamViewComponent implements OnInit, OnDestroy {
   unfollowStreamer() {
     this.following = false
     console.log("unfollowing")
-    this.http.post(`http://149.159.16.161:3123/unfollow/${this.streamerProfile.PublicKeyBase58Check}`, { publicKey: this.globalVars.loggedInUser.PublicKeyBase58Check }).subscribe((data) => { })
+    this.backendApi.jwtPost('http://149.159.16.161:3123', `/unfollow/${this.streamerProfile.PublicKeyBase58Check}`, this.globalVars.loggedInUser.PublicKeyBase58Check, { PublicKeyBase58Check: this.globalVars.loggedInUser.PublicKeyBase58Check }).subscribe((data) => { })
   }
 
   constructor(public webSocketService: WebSocketService, public globalVars: GlobalVarsService, private router: Router, private http: HttpClient, private route: ActivatedRoute, private backendApi: BackendApiService) {
@@ -79,7 +80,7 @@ export class StreamViewComponent implements OnInit, OnDestroy {
     console.log('init called to destoy')
     this.globalVars._updateDeSoExchangeRate()
     this.route.paramMap.subscribe(params => {
-      this.streamerUsername = params.get("username")
+      this.streamerPublicKey = params.get("publicKey")
       this.getStreamer();
       if (this.player) {
         this.player.destroy()
@@ -118,11 +119,11 @@ export class StreamViewComponent implements OnInit, OnDestroy {
   followStreamer() {
     console.log("called")
     this.following = true
-    this.http.post(`http://149.159.16.161:3123/follow/${this.streamerProfile.PublicKeyBase58Check}`, { publicKey: this.globalVars.loggedInUser.PublicKeyBase58Check }).subscribe((data) => { console.log(data) })
+    this.backendApi.jwtPost('http://149.159.16.161:3123/', `follow/${this.streamerProfile.PublicKeyBase58Check}`, this.globalVars.loggedInUser.PublicKeyBase58Check, { PublicKeyBase58Check: this.globalVars.loggedInUser.PublicKeyBase58Check }).subscribe((data) => { console.log(data) })
   }
 
   followedStreamers() {
-    this.http.get(`http://149.159.16.161:3123/following/${this.globalVars.loggedInUser.PublicKeyBase58Check}`).subscribe((data) => {
+    this.backendApi.jwtGet('http://149.159.16.161:3123', '/following', this.globalVars.loggedInUser.PublicKeyBase58Check).subscribe((data) => {
       this.followedStreamersList = data
       this.following = this.followedStreamersList.following.includes(this.streamerProfile.PublicKeyBase58Check)
 
@@ -130,76 +131,59 @@ export class StreamViewComponent implements OnInit, OnDestroy {
   }
 
   onAccountChange() {
+    this.ngOnInit()
     this.destroy()
-    this.getStreamer()
   }
 
   getStreamer() {
-    this.backendApi.GetSingleProfile(this.globalVars.localNode, "", this.streamerUsername).subscribe(
+    this.http.get(`http://149.159.16.161:3123/stream/${this.streamerPublicKey}`).subscribe((data) => {
+      this.streamer = data
+      if (!this.streamer.stream) {
+        this.router.navigate([this.globalVars.RouteNames.NOT_FOUND])
+      }
+      this.streamDescription = this.streamer.stream.description
+      this.streamTitle = this.streamer.stream.title
+      this.streamCategory = this.streamer.stream.category
+      this.isStreamerLive = this.streamer.stream.isLive
+      console.log(this.isStreamerLive)
+      console.log(this.streamer)
+    })
+    this.backendApi.GetSingleProfile(this.globalVars.localNode, this.streamerPublicKey, "").subscribe(
       (res) => {
         this.streamerProfile = res.Profile;
-        if (!this.chatSocket) {
-          this.chatSocket = this.webSocketService.openWebSocket(this.streamerProfile.PublicKeyBase58Check)
-          this.getChatMessages()
-        }
-        this.http.get(`http://149.159.16.161:3123/stream/${this.streamerProfile.PublicKeyBase58Check}`).subscribe((data) => {
-          // this.http.get(`http://149.159.16.161:3123/stream/${this.streamerProfile.PublicKeyBase58Check}/info`).subscribe((data: { stream: { category, description, title } }) => {
-          //   this.streamCategory = data.stream.category
-          //   this.streamDescription = data.stream.description
-          //   this.streamTitle = data.stream.title
-          // })
-          this.streamer = data
-          this.streamDescription = this.streamer.stream.description
-          this.streamTitle = this.streamer.stream.title
-          this.streamCategory = this.streamer.stream.category
-          this.isStreamerLive = this.streamer.stream.isLive
-          console.log(this.isStreamerLive)
-          console.log(this.streamer)
+        this.streamerUsername = this.streamerProfile.Username
 
-          this.backendApi.GetSingleProfilePicture(
-            this.globalVars.localNode,
-            this.streamerProfile.PublicKeyBase58Check,
-            this.globalVars.profileUpdateTimestamp ? `?${this.globalVars.profileUpdateTimestamp}` : ""
-          )
-            .subscribe((res) => {
-              this._readImageFileToProfilePicInput(res);
-              this.followedStreamers()
-              if (p2pml.hlsjs.Engine.isSupported()) {
-                var engine = new p2pml.hlsjs.Engine();
-                var loader = engine.createLoaderClass();
-              } else {
-                // var loader = XHRLoader;
-              }
+        this.backendApi.GetSingleProfilePicture(
+          this.globalVars.localNode,
+          this.streamerProfile.PublicKeyBase58Check,
+          this.globalVars.profileUpdateTimestamp ? `?${this.globalVars.profileUpdateTimestamp}` : ""
+        )
+          .subscribe((res) => {
+            this._readImageFileToProfilePicInput(res);
+            // change this
+            if (p2pml.hlsjs.Engine.isSupported()) {
               var engine = new p2pml.hlsjs.Engine();
-              this.player = new Clappr.Player({
-                parentId: "#video",
-                source: `http://149.159.16.161:8082/live/${this.streamer.stream._id}/index.m3u8`,
-                width: "100%",
-                height: "100%",
-                playback: {
-                  hlsjsConfig: {
-                    liveSyncDurationCount: 7,
-                    loader: loader
-                  }
+              var loader = engine.createLoaderClass();
+            } else {
+              // var loader = XHRLoader;
+            }
+            var engine = new p2pml.hlsjs.Engine();
+            this.player = new Clappr.Player({
+              parentId: "#video",
+              source: `http://149.159.16.161:8082/live/${this.streamer.stream._id}/index.m3u8`,
+              width: "100%",
+              height: "100%",
+              playback: {
+                hlsjsConfig: {
+                  liveSyncDurationCount: 7,
+                  loader: loader
                 }
-              });
-              if (p2pml.hlsjs.Engine.isSupported()) p2pml.hlsjs.initClapprPlayer(this.player);
-              this.player.play(true);
-              console.log("completed")
+              }
             });
-        },
-        );
-        // // get creators - creator coin value and username -- work here
-        // this.streamer = {
-        //   streams: [
-        //     {
-        //       _id: "615e20379a87aee1a0d381e5",
-        //       publicKey: "BC1YLj4aFMVM1g44wBgibYq8dFQ1NxTCpQFyJnNMqGqmyUt9zDVjZ5L",
-        //       username: "shivamgarg",
-        //       __v: 0
-        //     }
-        //   ]
-        // }
+            if (p2pml.hlsjs.Engine.isSupported()) p2pml.hlsjs.initClapprPlayer(this.player);
+            this.player.play(true);
+            console.log("completed")
+          });
 
 
       }, (err) => {
@@ -209,6 +193,14 @@ export class StreamViewComponent implements OnInit, OnDestroy {
           this.router.navigate(['notfound', '404'])
         }
       })
+
+    if (!this.chatSocket) {
+      this.chatSocket = this.webSocketService.openWebSocket(this.streamerPublicKey)
+      this.getChatMessages()
+    }
+    this.followedStreamers()
+
+
   }
 
   _readImageFileToProfilePicInput(file: Blob | File) {

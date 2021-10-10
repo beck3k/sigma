@@ -19,7 +19,8 @@ export class PageComponent implements OnInit {
   @Input() backToSigma = false
   @Input() channel = false
   followedStreamersList
-  @Input() streamerProfile = {PublicKeyBase58Check: ""}
+  followedUsernameStreamersList = []
+  @Input() streamerProfile = {PublicKeyBase58Check: ""} // might be problematic -- check the html
   @Output() accountChanged = new EventEmitter()
   mobile = false;
   @Output() streamChanged = new EventEmitter()
@@ -29,6 +30,7 @@ export class PageComponent implements OnInit {
   }
 
   onAccountChange() {
+    this.followedUsernameStreamersList = []
     this.followedStreamers()
     this.accountChanged.emit()
   }
@@ -41,9 +43,13 @@ export class PageComponent implements OnInit {
   }
 
   followedStreamers() {
-    this.http.get(`http://149.159.16.161:3123/following/${this.globalVars.loggedInUser.PublicKeyBase58Check}`).subscribe((data)=>{
+    this.backendApi.jwtGet('http://149.159.16.161:3123', '/following', this.globalVars.loggedInUser.PublicKeyBase58Check).subscribe((data)=>{
       this.followedStreamersList=data
-      console.log(this.followedStreamersList)
+      for (let i=0; i<10 && i<this.followedStreamersList.following.length; i++) {
+        console.log(this.followedStreamersList.following[i])
+        this.backendApi.GetSingleProfile(this.globalVars.localNode, this.followedStreamersList.following[i], "").subscribe((data)=>{
+        this.followedUsernameStreamersList.push({username: data.Profile.Username, publicKey: this.followedStreamersList.following[i]})})
+      }
     })
   }
 
@@ -53,10 +59,8 @@ export class PageComponent implements OnInit {
   }
 
   changeStream(newStreamerPublicKey) {
-    this.backendApi.GetSingleProfile(this.globalVars.localNode, newStreamerPublicKey, "").subscribe(
-      (res) => {
       this.streamChanged.emit()
-      this.router.navigate(['../',res.Profile.Username],{relativeTo: this.route})})
+      this.router.navigate([newStreamerPublicKey])
       this.followedStreamers()
   }
 
