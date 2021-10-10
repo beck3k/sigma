@@ -30,10 +30,6 @@ export class HomePageComponent implements OnInit {
     this.followedStreamers();
   }
 
-  goToCreatorDashboard() {
-    this.router.navigate(['dashboard', this.globalVars.loggedInUser.ProfileEntryResponse.Username], { relativeTo: this.route })
-  }
-
   changeStream(newStreamerPublicKey) {
     this.backendApi.GetSingleProfile(this.globalVars.localNode, newStreamerPublicKey, "").subscribe(
       (res) => {
@@ -44,9 +40,6 @@ export class HomePageComponent implements OnInit {
       })
   }
 
-  goBackToChannel() {
-    this.router.navigate([`/${this.globalVars.loggedInUser.ProfileEntryResponse.Username}`])
-  }
 
   goLive() {
     this.router.navigate([`dashboard`, this.globalVars.loggedInUser.ProfileEntryResponse.Username])

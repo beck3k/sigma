@@ -16,19 +16,12 @@ export class ChangeAccountSelectorComponent {
 
   selectorOpen: boolean;
   hoverRow: number;
-  @Input() input1
-  @Output() input1Click = new EventEmitter();
-  @Input() input2
-  @Output() input2Click = new EventEmitter();
+  @Input() settings
+  @Input() creatorDashboard
+  @Input() backToSigma
+  @Input() channel
   @Output() accountChanged = new EventEmitter()
 
-  onInput1Click() {
-    this.input1Click.emit()
-  }
-  onInput2Click() {
-    console.log("click received")
-    this.input2Click.emit()
-  }
   constructor(
     public globalVars: GlobalVarsService,
     private renderer: Renderer2,
@@ -62,7 +55,8 @@ export class ChangeAccountSelectorComponent {
       });
     });
   }
-
+  
+  
   _switchToUser(user) {
     this.globalVars.setLoggedInUser(user);
     this.globalVars.messageResponse = null;
@@ -74,5 +68,21 @@ export class ChangeAccountSelectorComponent {
       }
       this.globalVars.isLeftBarMobileOpen = false;
     });
+  }
+
+  goToCreatorDashboard() {
+    this.router.navigate(['dashboard', this.globalVars.loggedInUser.ProfileEntryResponse.Username])
+  }
+
+  goToChannel() {
+    this.router.navigate([`/${this.globalVars.loggedInUser.ProfileEntryResponse.Username}`])
+  }
+
+  goToSigma() {
+    this.router.navigate(['/'])
+  }
+
+  goToSettings() {
+    this.router.navigate(['settings'])
   }
 }

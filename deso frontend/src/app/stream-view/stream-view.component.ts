@@ -77,9 +77,16 @@ export class StreamViewComponent implements OnInit, OnDestroy {
     this.route.paramMap.subscribe(params => {
       this.streamerUsername = params.get("username")
       this.getStreamer();
+      if (this.player){
+        this.player.destroy()
+      }
     })
 
 
+  }
+
+  goToSettings() {
+    this.router.navigate(['settings'])
   }
   
 
@@ -89,17 +96,13 @@ export class StreamViewComponent implements OnInit, OnDestroy {
     this.router.navigate(['/'])
   }
 
-  goBackToChannel() {
-    if (this.globalVars.loggedInUser.ProfileEntryResponse.Username===this.streamerUsername){
-      return
-    }
-    this.destroy()
-    this.router.navigate([`/${this.globalVars.loggedInUser.ProfileEntryResponse.Username}`])
-  }
-
-  goToCreatorDashboard() {
-    this.router.navigate(['../', 'dashboard', this.globalVars.loggedInUser.ProfileEntryResponse.Username], {relativeTo: this.route})
-  }
+  // goBackToChannel() {
+  //   if (this.globalVars.loggedInUser.ProfileEntryResponse.Username===this.streamerUsername){
+  //     return
+  //   }
+  //   this.destroy()
+  //   this.router.navigate([`/${this.globalVars.loggedInUser.ProfileEntryResponse.Username}`])
+  // }
 
   changeStream(newStreamerPublicKey) {
     this.backendApi.GetSingleProfile(this.globalVars.localNode, newStreamerPublicKey, "").subscribe(
@@ -118,7 +121,7 @@ export class StreamViewComponent implements OnInit, OnDestroy {
     this.http.get(`http://149.159.16.161:3123/following/${this.globalVars.loggedInUser.PublicKeyBase58Check}`).subscribe((data)=>{
       this.followedStreamersList=data
       this.following = this.followedStreamersList.following.includes(this.streamerProfile.PublicKeyBase58Check)
-      
+
     })
   }
 

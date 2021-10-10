@@ -36,10 +36,6 @@ export class CreatorDashboardComponent implements OnInit {
     this.http.get('http://149.159.16.161:3123/categories').subscribe((data: {categories})=>this.categories=data.categories)
   }
 
-  goBackToChannel() {
-    this.router.navigate([`/${this.globalVars.loggedInUser.ProfileEntryResponse.Username}`])
-  }
-
   updateStreamInfo() {
     this.http.post(`http://149.159.16.161:3123/stream/${this.streamerProfile.PublicKeyBase58Check}/info`, {
       category: this.streamCategory,
@@ -69,9 +65,5 @@ export class CreatorDashboardComponent implements OnInit {
     this.streamKey=data.streamKey
   console.log(this.streamKey)})
     }
-
-  backToSigma() {
-    this.router.navigate(['/'])
-  }
 
 }
