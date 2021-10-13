@@ -3,10 +3,9 @@
       <div *ngIf="anyoneLive">
         <div class="col-7">
           <div id="video"></div>
-          <div class="player"></div>
           <div class="row">
             <div class="col-3">
-              <img [src]="streamerProfilePicture" alt="streamer profile picture" />
+              <img [src]="this.categoryStreams[0].profilePicture" alt="streamer profile picture" />
             </div>
             <div class="col-9">
               <div class="row">{{this.categoryStreams[0].publicKey}}</div>

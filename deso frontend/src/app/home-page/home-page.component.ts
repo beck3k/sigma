@@ -50,7 +50,9 @@ export class HomePageComponent implements OnInit {
   }
 
   followedStreamers() {
+    // get one random stream that is live
     this.http.get(`http://149.159.16.161:3123/streams/live/one`).subscribe((data: { stream }) => {
+      console.log("data:", data)
       if (data.stream) {
         this.anyoneLive = true
       }
@@ -75,11 +77,10 @@ export class HomePageComponent implements OnInit {
                 } else {
                   // var loader = XHRLoader;
                 }
-                console.log(this.streamer.stream._id)
                 var engine = new p2pml.hlsjs.Engine();
                 this.player = new Clappr.Player({
                   parentId: "#video",
-                  source: `http://149.159.16.161:8082/live/${this.streamer.stream._id}/index.m3u8`,
+                  source: `http://149.159.16.161:8082/live/${data.stream._id}/index.m3u8`,
                   width: "100%",
                   height: "100%",
                   playback: {
@@ -91,6 +92,7 @@ export class HomePageComponent implements OnInit {
                 });
                 if (p2pml.hlsjs.Engine.isSupported()) p2pml.hlsjs.initClapprPlayer(this.player);
                 this.player.play(true);
+                console.log("url:", `http://149.159.16.161:8082/live/${this.streamer.stream._id}/index.m3u8`)
               });
 
           })
