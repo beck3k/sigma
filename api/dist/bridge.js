@@ -13,33 +13,64 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ws_1 = __importDefault(require("ws"));
-const wss = new ws_1.default.WebSocketServer({
-    port: 8069
-});
-var topics = {};
-function addClient(ws, topic) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (!topics[topic]) {
-            topics[topic] = {
-                clients: [],
-                messages: []
-            };
-        }
-        topics[topic].clients.push(ws);
-        topics[topic].messages.forEach((msg) => {
-            ws.send(msg);
-        });
-        ws.on('message', (m) => {
-            topics[topic].clients.forEach((socket) => {
-                topics[topic].messages.push(m);
-                socket.send(m);
+class SocketBridge {
+    constructor() {
+        this.topics = {};
+        this.disconnectCallbacks = [];
+        this.connectCallbacks = [];
+    }
+    addClient(ws, topic) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var handler = this;
+            if (!this.topics[topic]) {
+                this.topics[topic] = {
+                    clients: [],
+                    messages: []
+                };
+            }
+            this.topics[topic].clients.push(ws);
+            this.topics[topic].messages.forEach((msg) => {
+                ws.send(msg);
+            });
+            this.connectCallbacks.forEach(connect => {
+                connect(topic, handler.topics[topic].clients.length);
+            });
+            ws.on('message', (m) => {
+                console.log(JSON.parse(m));
+                handler.topics[topic].messages.push(m);
+                handler.topics[topic].clients.forEach((socket) => {
+                    console.log('send ', m.toString(), ' to ', 'dumbfuck', 'topicshit: ', topic);
+                    socket.send(m);
+                });
+            });
+            ws.on('close', () => {
+                handler.topics[topic].clients.splice(handler.topics[topic].clients.indexOf(ws), 1);
+                handler.disconnectCallbacks.forEach(disconnect => {
+                    disconnect(topic, handler.topics[topic].clients.length);
+                });
             });
         });
-    });
+    }
+    start() {
+        const wss = new ws_1.default.WebSocketServer({
+            port: 8069
+        });
+        console.log('chotiya');
+        var handler = this;
+        wss.on('connection', (ws, req) => {
+            const url = new URL(req.url, 'http://localhost:8069/');
+            var topic = url.pathname.replace(/\//g, '_');
+            ws.id = Math.random();
+            handler.addClient(ws, topic);
+            console.log('looser ', ws.id, ' connected to ', topic);
+        });
+    }
+    onDisconnect(callback) {
+        this.disconnectCallbacks.push(callback);
+    }
+    onConnect(callback) {
+        this.connectCallbacks.push(callback);
+    }
 }
-wss.on('connection', (ws, req) => {
-    const url = new URL(req.url, 'http://localhost:8069/');
-    var topic = url.pathname.replace(/\//g, '_');
-    addClient(ws, topic);
-});
+exports.default = SocketBridge;
 //# sourceMappingURL=bridge.js.map

@@ -19,12 +19,50 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
-require("./bridge");
-dotenv_1.default.config();
+const passport_custom_1 = require("passport-custom");
+const passport_1 = __importDefault(require("passport"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const elliptic_1 = require("elliptic");
+const key_encoder_1 = __importDefault(require("key-encoder"));
+const bs58check_1 = __importDefault(require("bs58check"));
+const ec = new elliptic_1.ec("secp256k1");
 const app = (0, express_1.default)();
 const port = 3123;
+const bridge_1 = __importDefault(require("./bridge"));
+dotenv_1.default.config();
 app.use(body_parser_1.default.json());
 app.use((0, cors_1.default)());
+app.use(passport_1.default.initialize());
+passport_1.default.use('deso', new passport_custom_1.Strategy((req, done) => {
+    var token = null;
+    var publicKey = null;
+    if (req && req.route.methods.post && req.body.JWT) {
+        token = req.body.JWT;
+        publicKey = req.body.PublicKeyBase58Check;
+    }
+    else if (req && req.route.methods.get) {
+        token = req.headers['authorization'];
+        publicKey = req.headers['publickeybase58check'];
+    }
+    else {
+        done(null, false);
+    }
+    try {
+        const decodedKey = bs58check_1.default.decode(publicKey);
+        const decodedKeyArray = [...decodedKey];
+        const rawPK = decodedKeyArray.slice(3);
+        const hexPK = ec.keyFromPublic(rawPK).getPublic().encode('hex', true);
+        const keyEncoder = new key_encoder_1.default("secp256k1");
+        const encodedPK = keyEncoder.encodePublic(hexPK, "raw", "pem");
+        const result = jsonwebtoken_1.default.verify(token, encodedPK, {
+            algorithms: ["ES256"]
+        });
+        done(null, result);
+    }
+    catch (error) {
+        done(null, false);
+    }
+}));
 app.get('/', (req, res) => {
     res.send('API Alive');
 });
@@ -38,13 +76,15 @@ function getKey() {
     var key = crypto_js_1.default.SHA256("live/" + name).toString();
     return key;
 }
-app.post('/stream', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+// Reset stream key
+app.post('/stream', passport_1.default.authenticate('deso', { session: false }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var key = getKey();
-    var publicKey = req.body.publicKey;
+    var publicKey = req.body.PublicKeyBase58Check;
     var stream = yield db_1.StreamModel.findOneAndUpdate({
         publicKey
     }, {
-        key
+        key,
+        viewerCount: 0
     }, {
         new: true,
         upsert: true
@@ -56,14 +96,16 @@ app.post('/stream', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         streamKey: `${stream._id}?pwd=${key}`
     });
 }));
-app.get('/private/stream/:publicKey', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var stream = yield db_1.StreamModel.findOneAndUpdate({
-        publicKey: req.params.publicKey
+// Get private stream data
+app.get('/private/stream', passport_1.default.authenticate('deso', { session: false }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const publicKey = req.headers['publickeybase58check'];
+    var stream = yield db_1.StreamModel.findOne({
+        publicKey
     });
     if (!stream) {
         var key = getKey();
         stream = yield db_1.StreamModel.create({
-            publicKey: req.params.publicKey,
+            publicKey,
             key: key
         });
         stream.save();
@@ -78,25 +120,89 @@ app.get('/streams', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         streams
     });
 }));
-app.get('/stream/:pubkey', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get('/streams/live', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const streams = yield db_1.StreamModel.find({
+        isLive: true
+    }, '-key');
+    res.send({
+        streams
+    });
+}));
+app.get('/streams/live/one', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const stream = yield db_1.StreamModel.findOne({
-        publicKey: req.params.pubkey
+        isLive: true
     }, '-key');
     res.send({
         stream
     });
 }));
+app.get('/stream/:publicKey/info', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const stream = yield db_1.StreamModel.findOne({
+        publicKey: req.params.publicKey
+    }, '-key');
+    res.json({
+        stream: {
+            title: stream.title,
+            description: stream.description,
+            category: stream.category,
+            isLive: stream.isLive,
+            viewerCount: stream.viewerCount
+        }
+    });
+}));
+// Update Stream Info
+app.post('/stream/info', passport_1.default.authenticate('deso', { session: false }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var publicKey = req.body.PublicKeyBase58Check;
+    const stream = yield db_1.StreamModel.findOneAndUpdate({
+        publicKey
+    }, {
+        title: req.body.title,
+        description: req.body.description,
+        category: req.body.category,
+    });
+    console.log(req.body);
+    const fuckingOld = yield db_1.CategoryModel.updateOne({
+        streams: stream._id,
+    }, {
+        $pullAll: {
+            streams: [stream._id]
+        }
+    });
+    const newShit = yield db_1.CategoryModel.updateOne({
+        _id: req.body.category,
+        streams: {
+            $ne: stream._id
+        }
+    }, {
+        $push: {
+            streams: stream._id
+        }
+    });
+    res.json({ stream });
+}));
+app.get('/stream/:pubkey', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const stream = yield db_1.StreamModel.findOne({
+        publicKey: req.params.pubkey
+    }, '-key');
+    if (stream && stream.category) {
+        yield stream.populate('category');
+    }
+    res.send({
+        stream
+    });
+}));
 // PublicKey is of the streamer
-app.post('/follow/:publicKey', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post('/follow/:publicKey', passport_1.default.authenticate('deso', { session: false }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var publicKey = req.body.PublicKeyBase58Check;
     // Check that viewer exists
     yield db_1.ViewerModel.findOneAndUpdate({
-        publicKey: req.body.publicKey
+        publicKey
     }, {}, {
         upsert: true
     });
     // Check if following already, and push
     const followers = yield db_1.ViewerModel.updateOne({
-        publicKey: req.body.publicKey,
+        publicKey,
         following: {
             $ne: req.params.publicKey
         }
@@ -110,17 +216,107 @@ app.post('/follow/:publicKey', (req, res) => __awaiter(void 0, void 0, void 0, f
     });
 }));
 // Public key is of the viewer, will not be required after Auth implemented
-app.get('/following/:publicKey', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get('/following', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const publicKey = req.headers['publickeybase58check'];
     const following = yield db_1.ViewerModel.findOne({
-        publicKey: req.params.publicKey
+        publicKey
     });
     res.json({
         following: (following) ? following.following : []
     });
 }));
+app.post('/unfollow/:pubicKey', passport_1.default.authenticate('deso', { session: false }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var publicKey = req.body.PublicKeyBase58Check;
+    const deleted = yield db_1.ViewerModel.updateOne({
+        publicKey
+    }, {
+        $pullAll: {
+            following: [req.params.pubicKey]
+        }
+    });
+    res.send({
+        deleted
+    });
+}));
+app.get('/categories', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const categories = yield db_1.CategoryModel.find();
+    res.send({
+        categories
+    });
+}));
+function isStream(obj) {
+    return (obj && obj.key);
+}
+app.get('/category/:category', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const fuckYou = yield db_1.CategoryModel.findById(req.params.category);
+        if (fuckYou) {
+            yield db_1.CategoryModel.findById(req.params.category).populate('streams').exec((err, category) => {
+                if (category.streams) {
+                    var streams = category.streams.map((stream) => {
+                        if (isStream(stream)) {
+                            if (stream.isLive) {
+                                return stream;
+                            }
+                        }
+                    });
+                    res.json({
+                        streams: streams
+                    });
+                }
+                else {
+                    res.json({
+                        streams: null,
+                        fuck: true
+                    });
+                }
+            });
+        }
+        else {
+            res.send('Fuck off');
+        }
+    }
+    catch (e) {
+        res.json({
+            category: null,
+            categoryNotFound: true
+        });
+    }
+    // res.json({
+    //   category: category.streams.map((stream) => {
+    //     console.log(stream.isLive);
+    //     // if(stream.isLive){
+    //       return stream
+    //     // }
+    //   })
+    // });
+}));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         yield mongoose_1.default.connect(process.env.DBURL, {});
+        const socketBridge = new bridge_1.default();
+        function updateViewCount(pubKey, count) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const viewer = yield db_1.StreamModel.findOneAndUpdate({
+                    publicKey: pubKey
+                }, {
+                    viewerCount: count
+                });
+            });
+        }
+        socketBridge.onDisconnect((topic, count) => {
+            if (topic.substring(1, 5) == "chat") {
+                updateViewCount(topic.substring(6), count);
+            }
+            console.log('topic ', topic, ' has ', count);
+        });
+        socketBridge.onConnect((topic, count) => {
+            if (topic.substring(1, 5) == "chat") {
+                updateViewCount(topic.substring(6), count);
+            }
+            console.log('topic ', topic, ' has ', count);
+        });
+        socketBridge.start();
         app.listen(port, (err) => {
             if (err) {
                 return console.error(err);

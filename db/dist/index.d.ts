@@ -1,4 +1,5 @@
 import { Stream, StreamModel } from './stream';
 import { Viewer, ViewerModel } from './viewers';
-export { Stream, StreamModel, Viewer, ViewerModel };
+import { Category, CategoryModel } from './category';
+export { Stream, StreamModel, Viewer, ViewerModel, Category, CategoryModel };
 //# sourceMappingURL=index.d.ts.map
