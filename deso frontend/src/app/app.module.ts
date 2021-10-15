@@ -1,4 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatSelectModule } from "@angular/material/select";
@@ -7,7 +8,6 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { TextFieldModule } from "@angular/cdk/text-field";
-
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { BackendApiService } from "./backend-api.service";
@@ -154,13 +154,15 @@ import { ReferralProgramMgrComponent } from "./referral-program-mgr/referral-pro
 import { ReferralsComponent } from "./referrals/referrals.component";
 import { BuyDeSoEthComponent } from "./buy-deso-page/buy-deso-eth/buy-deso-eth.component";
 import { SanitizeVideoUrlPipe } from "../lib/pipes/sanitize-video-url-pipe";
-
+import { WebSocketService } from "./web-socket.service";
 // Modular Themes for DeSo by Carsen Klock @carsenk
 import { ThemeModule } from "./theme/theme.module";
 import { Theme } from "./theme/symbols";
 import { StreamViewComponent } from './stream-view/stream-view.component';
 import { CreatorDashboardComponent } from './creator-dashboard/creator-dashboard.component';
 import { HomePageComponent } from './home-page/home-page.component';
+import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { CategoryViewComponent } from './category-view/category-view.component';
 const lightTheme: Theme = { key: "light", name: "Light Theme" };
 const darkTheme: Theme = { key: "dark", name: "Dark Theme" };
 const icydarkTheme: Theme = { key: "icydark", name: "Icy Dark Theme" };
@@ -302,9 +304,12 @@ const greenishTheme: Theme = { key: "greenish", name: "Green Theme" };
     StreamViewComponent,
     CreatorDashboardComponent,
     HomePageComponent,
+    UserDashboardComponent,
+    CategoryViewComponent,
   ],
   imports: [
     BrowserModule,
+    ClipboardModule,
     DragDropModule,
     AppRoutingModule,
     FormsModule,
@@ -333,7 +338,7 @@ const greenishTheme: Theme = { key: "greenish", name: "Green Theme" };
         (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark"),
     }),
   ],
-  providers: [BackendApiService, GlobalVarsService, BsModalService, IdentityService],
+  providers: [BackendApiService, GlobalVarsService, BsModalService, IdentityService, WebSocketService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

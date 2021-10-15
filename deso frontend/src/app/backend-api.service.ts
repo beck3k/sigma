@@ -504,6 +504,18 @@ export class BackendApiService {
     );
   }
 
+  jwtGet(endpoint: string, path: string, publicKey: string) : Observable<any> {
+    const request = this.identityService.jwt({
+      ...this.identityService.identityServiceParamsForKey(publicKey),
+    });
+
+    return request.pipe(
+      switchMap((signed) => {
+        return this.httpClient.get<any>(this._makeRequestURL(endpoint, path), { headers: { 'Authorization': signed.jwt, 'PublicKeyBase58Check': publicKey } }).pipe(catchError(this._handleError));
+      })
+    );
+  }
+
   GetExchangeRate(endpoint: string): Observable<any> {
     return this.get(endpoint, BackendRoutes.ExchangeRateRoute);
   }

@@ -1,13 +1,12 @@
 <!-- Top Bar -->
 <div
-  class="global__top-bar global__top-bar__height d-flex align-items-center pl-15px fs-18px font-weight-bold border-bottom border-color-grey"
+  class="d-flex align-items-center pl-15px fs-18px font-weight-bold border-bottom border-color-grey"
   *ngIf="!inTutorial"
 >
   <top-bar-mobile-navigation-control class="mr-15px d-lg-none d-inline-block" *ngIf="!inTutorial"></top-bar-mobile-navigation-control>
   Update Profile
 </div>
 
-<div class="global__top-bar__height" *ngIf="!inTutorial"></div>
 
 <div *ngIf="inTutorial" class="d-flex align-items-center justify-content-start w-100 p-3 fs-18px font-weight-bold border-bottom border-color-grey secalt-bg">
   <top-bar-mobile-hamburger-menu class="mr-15px d-lg-none d-inline-block"></top-bar-mobile-hamburger-menu>

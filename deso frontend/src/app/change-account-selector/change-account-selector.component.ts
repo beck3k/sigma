@@ -16,13 +16,11 @@ export class ChangeAccountSelectorComponent {
 
   selectorOpen: boolean;
   hoverRow: number;
-  @Input() input1
-  @Output() input1Click = new EventEmitter();
-
-  onInput1Click() {
-    this.input1Click.emit()
-  }
-
+  @Input() settings
+  @Input() creatorDashboard
+  @Input() backToSigma
+  @Input() channel
+  @Output() accountChanged = new EventEmitter()
   constructor(
     public globalVars: GlobalVarsService,
     private renderer: Renderer2,
@@ -56,20 +54,34 @@ export class ChangeAccountSelectorComponent {
       });
     });
   }
-
+  
+  
   _switchToUser(user) {
     this.globalVars.setLoggedInUser(user);
     this.globalVars.messageResponse = null;
+    this.accountChanged.emit()
 
     // Now we call update everything on the newly logged in user to make sure we have the latest info this user.
     this.globalVars.updateEverything().add(() => {
       if (!this.globalVars.userInTutorial(this.globalVars.loggedInUser)) {
-        const currentUrl = this.router.url;
-        this.router.navigate(["/" + this.globalVars.RouteNames.BROWSE]).then(() => {
-          this.router.navigateByUrl(currentUrl);
-        });
       }
       this.globalVars.isLeftBarMobileOpen = false;
     });
+  }
+
+  goToCreatorDashboard() {
+    this.router.navigate(['dashboard'])
+  }
+
+  goToChannel() {
+    this.router.navigate([`/${this.globalVars.loggedInUser.PublicKeyBase58Check}`])
+  }
+
+  goToSigma() {
+    this.router.navigate(['/'])
+  }
+
+  goToSettings() {
+    this.router.navigate(['settings'])
   }
 }

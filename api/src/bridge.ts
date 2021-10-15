@@ -45,6 +45,7 @@ class SocketBridge {
     });
   }
 
+<<<<<<< HEAD
   start() {
     const wss = new WebSocket.WebSocketServer({
       port: 8069
@@ -59,6 +60,12 @@ class SocketBridge {
       ws.id = Math.random();
       handler.addClient(ws, topic);
       console.log('looser ', ws.id, ' connected to ', topic);
+=======
+  ws.on('message', (m) => {
+    topics[topic].messages.push(m);
+    topics[topic].clients.forEach((socket) => {
+      socket.send(m);
+>>>>>>> afe50dec3866bb036802cc7a5b8a61ce5b896d46
     });
   }
 

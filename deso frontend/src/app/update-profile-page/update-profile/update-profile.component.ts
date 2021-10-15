@@ -240,25 +240,25 @@ export class UpdateProfileComponent implements OnInit, OnChanges {
       });
       return;
     }
-    if (comp.globalVars.loggedInUser.UsersWhoHODLYouCount === 0) {
-      SwalHelper.fire({
-        target: comp.globalVars.getTargetComponentSelector(),
-        icon: "success",
-        title: "Buy your creator coin",
-        showConfirmButton: true,
-        focusConfirm: true,
-        customClass: {
-          confirmButton: "btn btn-light",
-        },
-        confirmButtonText: "Buy Your Coin",
-      }).then((res) => {
-        if (res.isConfirmed) {
-          comp.router.navigate([
-            AppRoutingModule.buyCreatorPath(comp.globalVars.loggedInUser.ProfileEntryResponse.Username),
-          ]);
-        }
-      });
-    }
+    // if (comp.globalVars.loggedInUser.UsersWhoHODLYouCount === 0) {
+    //   SwalHelper.fire({
+    //     target: comp.globalVars.getTargetComponentSelector(),
+    //     icon: "success",
+    //     title: "Buy your creator coin",
+    //     showConfirmButton: true,
+    //     focusConfirm: true,
+    //     customClass: {
+    //       confirmButton: "btn btn-light",
+    //     },
+    //     confirmButtonText: "Buy Your Coin",
+    //   }).then((res) => {
+    //     if (res.isConfirmed) {
+    //       comp.router.navigate([
+    //         AppRoutingModule.buyCreatorPath(comp.globalVars.loggedInUser.ProfileEntryResponse.Username),
+    //       ]);
+    //     }
+    //   });
+    // }
   }
 
   _updateProfileFailure(comp: UpdateProfileComponent) {
