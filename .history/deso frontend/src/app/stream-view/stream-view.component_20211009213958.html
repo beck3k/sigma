@@ -1,5 +1,5 @@
 <app-page [settings]="true" [backToSigma]="true"
-  [channel]="true && this.globalVars.loggedInUser.ProfileEntryResponse?.Username && this.globalVars.loggedInUser.ProfileEntryResponse.Username!==this.streamerUsername"
+  [channel]="(true && this.globalVars.loggedInUser.ProfileEntryResponse.Username )&& this.globalVars.loggedInUser.ProfileEntryResponse.Username!==this.streamerUsername"
   [creatorDashboard]="true" [streamerProfile]="streamerProfile" (accountChanged)="onAccountChange()">
   <div class="container row">
     <div class="col-8">
@@ -8,7 +8,7 @@
       <div class="row">
         <div class="col-6">
           <img [src]="streamerProfilePicture" alt="streamer profile picture" />
-          <div class="row">{{this.streamerUsername}}</div>
+          <div class="row">{{this.streamerProfile.Username}}</div>
           <div class="row">{{this.streamTitle}}</div>
           <div class="row">{{this.streamDescription}}</div>
           <div class="row">Streamer Live: {{this.isStreamerLive}}</div>
@@ -17,16 +17,16 @@
             (userBlocked)="blockUser()"></creator-profile-top-card>
           <div class="row">flair</div>
           <button (click)="followStreamer()"
-            *ngIf="this.globalVars.loggedInUser.PublicKeyBase58Check !==this.streamerProfile.PublicKeyBase58Check && !following">Follow</button>
+            *ngIf="this.globalVars.loggedInUser.ProfileEntryResponse.Username!=this.streamerUsername && !following">Follow</button>
           <button (click)="unfollowStreamer()"
-            *ngIf="this.globalVars.loggedInUser.PublicKeyBase58Check !==this.streamerProfile.PublicKeyBase58Check && following">Unfollow</button>
+            *ngIf="this.globalVars.loggedInUser.ProfileEntryResponse.Username!=this.streamerUsername && following">Unfollow</button>
 
         </div>
 
       </div>
     </div>
 
-    <div class="col-3 offset-md-1 px-100">
+    <div class="col-4">
       <!-- <header>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
           <a class="navbar-brand" href="#">Chat app</a>
@@ -57,7 +57,7 @@
             <div class="chat-send row">
 
               <div class="col-8">
-                <input type="text" class="form-control" name="message" id="input-message" autocomplete="off" ngModel>
+                <input type="text" class="form-control" name="message" id="input-message" ngModel>
               </div>
               <div class="col-2">
                 <button type="submit" class="btn btn-primary">Send</button>
