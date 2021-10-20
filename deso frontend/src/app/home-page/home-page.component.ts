@@ -3,6 +3,7 @@ import { GlobalVarsService } from '../global-vars.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BackendApiService } from '../backend-api.service';
+import { environment } from '../../environments/environment'
 
 declare var p2pml: any;
 declare var Clappr: any;
@@ -46,12 +47,12 @@ export class HomePageComponent implements OnInit {
 
 
   goLive() {
-    this.router.navigate([`dashboard`, this.globalVars.loggedInUser.ProfileEntryResponse.Username])
+    this.router.navigate([`dashboard`])
   }
 
   followedStreamers() {
     // get one random stream that is live
-    this.http.get(`http://149.159.16.161:3123/streams/live/one`).subscribe((data: { stream }) => {
+    this.http.get(`${environment.apiURL}/streams/live/one`).subscribe((data: { stream }) => {
       console.log("data:", data)
       if (data.stream) {
         this.anyoneLive = true
@@ -80,7 +81,7 @@ export class HomePageComponent implements OnInit {
                 var engine = new p2pml.hlsjs.Engine();
                 this.player = new Clappr.Player({
                   parentId: "#video",
-                  source: `http://149.159.16.161:8082/live/${data.stream._id}/index.m3u8`,
+                  source: `${environment.apiURL}/live/${data.stream._id}/index.m3u8`,
                   width: "100%",
                   height: "100%",
                   playback: {
@@ -92,7 +93,7 @@ export class HomePageComponent implements OnInit {
                 });
                 if (p2pml.hlsjs.Engine.isSupported()) p2pml.hlsjs.initClapprPlayer(this.player);
                 this.player.play(true);
-                console.log("url:", `http://149.159.16.161:8082/live/${this.streamer.stream._id}/index.m3u8`)
+                console.log("url:", `${environment.apiURL}/live/${this.streamer.stream._id}/index.m3u8`)
               });
 
           })
@@ -117,10 +118,10 @@ export class HomePageComponent implements OnInit {
 
   getCategories() {
     console.log("get categoires called")
-    this.http.get('http://149.159.16.161:3123/categories').subscribe((data: { categories }) => {
+    this.http.get(`${environment.apiURL}/categories`).subscribe((data: { categories }) => {
       this.categories = data.categories
       for (let category of this.categories){
-        this.http.get(`http://149.159.16.161:3123/category/${category._id}`).subscribe((data)=>{
+        this.http.get(`${environment.apiURL}/category/${category._id}`).subscribe((data)=>{
           console.log(data)
         })
       }

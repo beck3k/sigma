@@ -9,6 +9,7 @@ import { BackendApiService } from '../backend-api.service'
 import { OnDestroy, Input } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { WebSocketService, ChatMessageDto } from '../web-socket.service';
+import { environment } from '../../environments/environment'
 
 declare var p2pml: any;
 declare var Clappr: any;
@@ -51,7 +52,7 @@ export class StreamViewComponent implements OnInit, OnDestroy {
   unfollowStreamer() {
     this.following = false
     console.log("unfollowing")
-    this.backendApi.jwtPost('http://149.159.16.161:3123', `/unfollow/${this.streamerProfile.PublicKeyBase58Check}`, this.globalVars.loggedInUser.PublicKeyBase58Check, { PublicKeyBase58Check: this.globalVars.loggedInUser.PublicKeyBase58Check }).subscribe((data) => { })
+    this.backendApi.jwtPost(`${environment.apiURL}`, `/unfollow/${this.streamerProfile.PublicKeyBase58Check}`, this.globalVars.loggedInUser.PublicKeyBase58Check, { PublicKeyBase58Check: this.globalVars.loggedInUser.PublicKeyBase58Check }).subscribe((data) => { })
   }
 
   constructor(public webSocketService: WebSocketService, public globalVars: GlobalVarsService, private router: Router, private http: HttpClient, private route: ActivatedRoute, private backendApi: BackendApiService) {
@@ -119,11 +120,11 @@ export class StreamViewComponent implements OnInit, OnDestroy {
   followStreamer() {
     console.log("called")
     this.following = true
-    this.backendApi.jwtPost('http://149.159.16.161:3123/', `follow/${this.streamerProfile.PublicKeyBase58Check}`, this.globalVars.loggedInUser.PublicKeyBase58Check, { PublicKeyBase58Check: this.globalVars.loggedInUser.PublicKeyBase58Check }).subscribe((data) => { console.log(data) })
+    this.backendApi.jwtPost(`${environment.apiURL}`, `/follow/${this.streamerProfile.PublicKeyBase58Check}`, this.globalVars.loggedInUser.PublicKeyBase58Check, { PublicKeyBase58Check: this.globalVars.loggedInUser.PublicKeyBase58Check }).subscribe((data) => { console.log(data) })
   }
 
   followedStreamers() {
-    this.backendApi.jwtGet('http://149.159.16.161:3123', '/following', this.globalVars.loggedInUser.PublicKeyBase58Check).subscribe((data) => {
+    this.backendApi.jwtGet(`${environment.apiURL}`, '/following', this.globalVars.loggedInUser.PublicKeyBase58Check).subscribe((data) => {
       this.followedStreamersList = data
       this.following = this.followedStreamersList.following.includes(this.streamerProfile.PublicKeyBase58Check)
 
@@ -136,8 +137,9 @@ export class StreamViewComponent implements OnInit, OnDestroy {
   }
 
   getStreamer() {
-    this.http.get(`http://149.159.16.161:3123/stream/${this.streamerPublicKey}`).subscribe((data) => {
+    this.http.get(`${environment.apiURL}/stream/${this.streamerPublicKey}`).subscribe((data) => {
       this.streamer = data
+      console.log("fuck u:", data, !this.streamer.stream)
       if (!this.streamer.stream) {
         this.router.navigate([this.globalVars.RouteNames.NOT_FOUND])
       }
@@ -185,14 +187,15 @@ export class StreamViewComponent implements OnInit, OnDestroy {
             console.log("completed")
           });
 
-
-      }, (err) => {
-        if (err.error.error.includes("GetSingleProfile: could not find profile for username or public key")) {
-          console.log("came here")
-          console.log(this.globalVars.RouteNames.NOT_FOUND)
-          this.router.navigate(['notfound', '404'])
         }
-      })
+      // }, (err) => {
+      //   if (err.error.error.includes("GetSingleProfile: could not find profile for username or public key")) {
+      //     console.log("came here")
+      //     console.log(this.globalVars.RouteNames.NOT_FOUND)
+      //     this.router.navigate(['notfound', '404'])
+      //   }
+      // }
+      )
 
     if (!this.chatSocket) {
       this.chatSocket = this.webSocketService.openWebSocket(this.streamerPublicKey)

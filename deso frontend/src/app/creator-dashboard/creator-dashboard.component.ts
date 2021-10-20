@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router, NavigationExtras } from "@angular/router";
 import { ActivatedRoute } from '@angular/router';
 import { BackendApiService } from '../backend-api.service';
+import { environment } from '../../environments/environment'
 
 @Component({
   selector: 'app-creator-dashboard',
@@ -38,11 +39,11 @@ export class CreatorDashboardComponent implements OnInit {
   }
 
   getCategories() {
-    this.http.get('http://149.159.16.161:3123/categories').subscribe((data: { categories }) => this.categories = data.categories)
+    this.http.get(`${environment.apiURL}/categories`).subscribe((data: { categories }) => this.categories = data.categories)
   }
 
   updateStreamInfo() {
-    this.backendApi.jwtPost('http://149.159.16.161:3123', `/stream/info`, this.globalVars.loggedInUser.PublicKeyBase58Check, {
+    this.backendApi.jwtPost(`${environment.apiURL}`, `/stream/info`, this.globalVars.loggedInUser.PublicKeyBase58Check, {
       PublicKeyBase58Check: this.globalVars.loggedInUser.PublicKeyBase58Check,
       category: this.streamCategory,
       title: this.streamTitle,
@@ -61,7 +62,7 @@ export class CreatorDashboardComponent implements OnInit {
         // use logged in user information to avoid server side auth
       })
       
-      this.backendApi.jwtGet('http://149.159.16.161:3123/', `private/stream`, this.globalVars.loggedInUser.PublicKeyBase58Check).subscribe((data: { stream: { streamKey, _doc: { category, title, description } } }) => {
+      this.backendApi.jwtGet(`${environment.apiURL}`, `/private/stream`, this.globalVars.loggedInUser.PublicKeyBase58Check).subscribe((data: { stream: { streamKey, _doc: { category, title, description } } }) => {
           console.log(data)
           this.streamCategory = data.stream._doc.category
           this.streamDescription = data.stream._doc.description
@@ -74,7 +75,7 @@ export class CreatorDashboardComponent implements OnInit {
   }
 
   resetStreamKey() {
-    this.backendApi.jwtPost('http://149.159.16.161:3123', '/stream', this.globalVars.loggedInUser.PublicKeyBase58Check,
+    this.backendApi.jwtPost(`${environment.apiURL}`, '/stream', this.globalVars.loggedInUser.PublicKeyBase58Check,
       { username: this.globalVars.loggedInUser.ProfileEntryResponse.Username, PublicKeyBase58Check: this.globalVars.loggedInUser.PublicKeyBase58Check }).subscribe((data: { streamKey }) => {
         console.log(data)
         this.streamKey = data.streamKey

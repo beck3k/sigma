@@ -49,7 +49,7 @@ export class ChangeAccountSelectorComponent {
       this.backendApi.setIdentityServiceUsers(res.users, loggedInUser);
       this.globalVars.updateEverything().add(() => {
         if (!this.globalVars.userInTutorial(this.globalVars.loggedInUser)) {
-          this.router.navigate(["/" + this.globalVars.RouteNames.BROWSE]);
+          this.router.navigate(["/"]);
         }
       });
     });

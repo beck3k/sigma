@@ -3,6 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
+  apiURL: "http://ec2-3-144-203-39.us-east-2.compute.amazonaws.com",
   production: false,
   uploadImageHostname: "bitclout.com",
   jumioEndpointHostname: "bitclout.com",

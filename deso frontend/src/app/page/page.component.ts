@@ -3,6 +3,7 @@ import { GlobalVarsService } from "../global-vars.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { BackendApiService } from "../backend-api.service";
 import { HttpClient } from "@angular/common/http";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-page",
@@ -43,7 +44,7 @@ export class PageComponent implements OnInit {
   }
 
   followedStreamers() {
-    this.backendApi.jwtGet('http://149.159.16.161:3123', '/following', this.globalVars.loggedInUser.PublicKeyBase58Check).subscribe((data)=>{
+    this.backendApi.jwtGet(`${environment.apiURL}`, '/following', this.globalVars.loggedInUser.PublicKeyBase58Check).subscribe((data)=>{
       this.followedStreamersList=data
       for (let i=0; i<10 && i<this.followedStreamersList.following.length; i++) {
         console.log(this.followedStreamersList.following[i])

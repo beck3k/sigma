@@ -858,7 +858,7 @@ export class GlobalVarsService {
         queryParams: { stepNum },
       });
     } else {
-      this.router.navigate(["/" + this.RouteNames.BROWSE]);
+      this.router.navigate(["/"]);
     }
   }
 

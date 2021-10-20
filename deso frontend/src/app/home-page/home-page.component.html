@@ -26,7 +26,9 @@
     <br>
     <div *ngIf="!anyoneLive" class="col-7">
       <p>No one is Live right now. Be the First to Go Live!</p>
-      <button (click)="goLive()"> Go Live!</button>
+      <br>
+      <button (click)="goLive()" class="btn btn-primary">Go Live!</button>
+
       <br>
       <br>
       <div *ngFor="let category of categories"><button (click)="goToCategory(category._id)">{{category.name}}</button> <br></div>
