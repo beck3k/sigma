@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "messages-thread-view.component.scss"
+    ],
+    "names": [],
+    "file": "messages-thread-view.component.css"
+}

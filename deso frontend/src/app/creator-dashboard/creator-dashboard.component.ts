@@ -73,6 +73,11 @@ export class CreatorDashboardComponent implements OnInit {
       
       this.getCategories()
   }
+  
+  redirectToHomePage() {
+    console.log("clicked")
+    this.router.navigate(['/'])
+  }
 
   resetStreamKey() {
     this.backendApi.jwtPost(`${environment.apiURL}`, '/stream', this.globalVars.loggedInUser.PublicKeyBase58Check,

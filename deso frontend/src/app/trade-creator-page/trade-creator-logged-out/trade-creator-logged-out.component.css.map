@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "trade-creator-logged-out.component.scss"
+    ],
+    "names": [],
+    "file": "trade-creator-logged-out.component.css"
+}

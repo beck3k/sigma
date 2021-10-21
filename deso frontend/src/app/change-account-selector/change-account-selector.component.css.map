@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "change-account-selector.component.scss"
+    ],
+    "names": [],
+    "file": "change-account-selector.component.css"
+}

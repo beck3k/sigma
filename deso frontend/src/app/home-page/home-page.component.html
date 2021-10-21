@@ -20,7 +20,8 @@
               *ngIf="this.globalVars.loggedInUser.ProfileEntryResponse.Username!=this.streamerUsername">Follow</button>
           </div>
         </div>
-        <div *ngFor="let category of categories"><button (click)="goToCategory(category._id)">{{category.name}}</button><br></div>
+        <div *ngFor="let category of categories"><button
+            (click)="goToCategory(category._id)">{{category.name}}</button><br></div>
       </div>
     </div>
     <br>
@@ -31,7 +32,8 @@
 
       <br>
       <br>
-      <div *ngFor="let category of categories"><button (click)="goToCategory(category._id)">{{category.name}}</button> <br></div>
+      <div *ngFor="let category of categories"><button class="btn btn-primary"
+          (click)="goToCategory(category._id)">{{category.name}}</button> <br><br></div>
     </div>
 
     <br>

@@ -9,6 +9,7 @@ $feed-border-radius: 12px;
 @import 'app/theme/themes/index';
 @import "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
 
+
 // regular style toast
 @import '~ngx-toastr/toastr';
 
@@ -2834,3 +2835,7 @@ input {
 // body {
 //   background-color: #1F1D2B;
 // }
+
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";

@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,MAAM,CAAA;EACJ,KAAK,EAAC,IAAI;EACV,MAAM,EAAC,IAAI;CACZ;;AAED,AAAA,GAAG,AAAA,aAAa,CAAC;EACf,MAAM,EAAE,KAAK;EACb,aAAa,EAAE,IAAI;CACpB",
+    "sources": [
+        "stream-view.component.scss"
+    ],
+    "names": [],
+    "file": "stream-view.component.css"
+}

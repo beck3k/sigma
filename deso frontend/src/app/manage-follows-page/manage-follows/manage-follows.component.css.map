@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "manage-follows.component.scss"
+    ],
+    "names": [],
+    "file": "manage-follows.component.css"
+}

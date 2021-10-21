@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "network-info.component.scss"
+    ],
+    "names": [],
+    "file": "network-info.component.css"
+}

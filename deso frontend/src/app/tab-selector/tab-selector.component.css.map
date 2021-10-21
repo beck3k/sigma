@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "tab-selector.component.scss"
+    ],
+    "names": [],
+    "file": "tab-selector.component.css"
+}
