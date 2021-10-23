@@ -24,7 +24,7 @@ export class StreamViewComponent implements OnInit, OnDestroy {
   streamerProfile // taken from get-single-profile
   streamerUsername // taken from url
   streamerProfilePicture // taken from get-single-profile-picture
-  followedStreamersList
+  // followedStreamersList
   player
   chatMessages
   streamTitle
@@ -36,7 +36,7 @@ export class StreamViewComponent implements OnInit, OnDestroy {
     this.destroy()
   }
 
-  following = false
+  // following = false
 
   getChatMessages() {
     console.log("from websocket messages: ", this.webSocketService.chatMessages)
@@ -49,11 +49,11 @@ export class StreamViewComponent implements OnInit, OnDestroy {
     sendForm.controls.message.reset();
   }
 
-  unfollowStreamer() {
-    this.following = false
-    console.log("unfollowing")
-    this.backendApi.jwtPost(`${environment.apiURL}`, `/unfollow/${this.streamerProfile.PublicKeyBase58Check}`, this.globalVars.loggedInUser.PublicKeyBase58Check, { PublicKeyBase58Check: this.globalVars.loggedInUser.PublicKeyBase58Check }).subscribe((data) => { })
-  }
+  // unfollowStreamer() {
+  //   this.following = false
+  //   console.log("unfollowing")
+  //   this.backendApi.jwtPost(`${environment.apiURL}`, `/unfollow/${this.streamerProfile.PublicKeyBase58Check}`, this.globalVars.loggedInUser.PublicKeyBase58Check, { PublicKeyBase58Check: this.globalVars.loggedInUser.PublicKeyBase58Check }).subscribe((data) => { })
+  // }
 
   constructor(public webSocketService: WebSocketService, public globalVars: GlobalVarsService, private router: Router, private http: HttpClient, private route: ActivatedRoute, private backendApi: BackendApiService) {
     console.log("constructor called")
@@ -117,19 +117,19 @@ export class StreamViewComponent implements OnInit, OnDestroy {
   //     this.router.navigate(['../',res.Profile.Username],{relativeTo: this.route})})
   // }
 
-  followStreamer() {
-    console.log("called")
-    this.following = true
-    this.backendApi.jwtPost(`${environment.apiURL}`, `/follow/${this.streamerProfile.PublicKeyBase58Check}`, this.globalVars.loggedInUser.PublicKeyBase58Check, { PublicKeyBase58Check: this.globalVars.loggedInUser.PublicKeyBase58Check }).subscribe((data) => { console.log(data) })
-  }
+  // followStreamer() {
+  //   console.log("called")
+  //   this.following = true
+  //   this.backendApi.jwtPost(`${environment.apiURL}`, `/follow/${this.streamerProfile.PublicKeyBase58Check}`, this.globalVars.loggedInUser.PublicKeyBase58Check, { PublicKeyBase58Check: this.globalVars.loggedInUser.PublicKeyBase58Check }).subscribe((data) => { console.log(data) })
+  // }
 
-  followedStreamers() {
-    this.backendApi.jwtGet(`${environment.apiURL}`, '/following', this.globalVars.loggedInUser.PublicKeyBase58Check).subscribe((data) => {
-      this.followedStreamersList = data
-      this.following = this.followedStreamersList.following.includes(this.streamerProfile.PublicKeyBase58Check)
+  // followedStreamers() {
+  //   this.backendApi.jwtGet(`${environment.apiURL}`, '/following', this.globalVars.loggedInUser.PublicKeyBase58Check).subscribe((data) => {
+  //     this.followedStreamersList = data
+  //     this.following = this.followedStreamersList.following.includes(this.streamerProfile.PublicKeyBase58Check)
 
-    })
-  }
+  //   })
+  // }
 
   onAccountChange() {
     this.ngOnInit()
@@ -172,7 +172,7 @@ export class StreamViewComponent implements OnInit, OnDestroy {
             var engine = new p2pml.hlsjs.Engine();
             this.player = new Clappr.Player({
               parentId: "#video",
-              source: `http://149.159.16.161:8082/live/${this.streamer.stream._id}/index.m3u8`,
+              source: `http://ec2-18-216-128-152.us-east-2.compute.amazonaws.com/live/${this.streamer.stream._id}/index.m3u8`,
               width: "100%",
               height: "100%",
               playback: {
@@ -201,7 +201,6 @@ export class StreamViewComponent implements OnInit, OnDestroy {
       this.chatSocket = this.webSocketService.openWebSocket(this.streamerPublicKey)
       this.getChatMessages()
     }
-    this.followedStreamers()
 
 
   }

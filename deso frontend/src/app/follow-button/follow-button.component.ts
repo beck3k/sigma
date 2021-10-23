@@ -13,6 +13,7 @@ import { FollowChangeObservableResult } from "../../lib/observable-results/follo
 import { Subscription } from "rxjs";
 import { CanPublicKeyFollowTargetPublicKeyHelper } from "../../lib/helpers/follows/can_public_key_follow_target_public_key_helper";
 import { FollowService } from "../../lib/services/follow/follow.service";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "follow-button",
@@ -34,23 +35,16 @@ export class FollowButtonComponent implements OnInit, OnDestroy {
   followChangeSubscription: Subscription;
   changeRef: ChangeDetectorRef;
 
-  _makeFollowTransaction(event, isFollow: boolean) {
-    this.createFollowTxnBeingCalled = true;
-    event.stopPropagation();
-    this.followService._toggleFollow(isFollow, this.followedPubKeyBase58Check).add(() => {
-      this.createFollowTxnBeingCalled = false;
-      // Need to manually detect changes, since the follow button can rendered from the feed
-      // (which has change detection disabled)
-      this.changeRef.detectChanges();
-    });
+  unfollow() {
+    this.isFollowing = false;
+    this.backendApi.jwtPost(`${environment.apiURL}`, `/unfollow/${this.followedPubKeyBase58Check}`, this.globalVars.loggedInUser.PublicKeyBase58Check, { PublicKeyBase58Check: this.globalVars.loggedInUser.PublicKeyBase58Check }).subscribe((data) => { console.log(data) })
   }
 
-  unfollow(event) {
-    this._makeFollowTransaction(event, false);
-  }
+  follow() {
+    console.log("follow button called")
+    this.isFollowing = true;
+    this.backendApi.jwtPost(`${environment.apiURL}`, `/follow/${this.followedPubKeyBase58Check}`, this.globalVars.loggedInUser.PublicKeyBase58Check, { PublicKeyBase58Check: this.globalVars.loggedInUser.PublicKeyBase58Check }).subscribe((data) => { console.log(data) })
 
-  follow(event) {
-    this._makeFollowTransaction(event, true);
   }
 
   canLoggedInUserFollowTargetPublicKey() {
@@ -112,6 +106,9 @@ export class FollowButtonComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.isFollowing = this.followService._isLoggedInUserFollowing(this.followedPubKeyBase58Check);
+    this.backendApi.jwtGet(`${environment.apiURL}`, '/following', this.globalVars.loggedInUser.PublicKeyBase58Check).subscribe((data: { following }) => {
+      this.isFollowing = data.following.includes(this.followedPubKeyBase58Check);
+
+    })
   }
 }

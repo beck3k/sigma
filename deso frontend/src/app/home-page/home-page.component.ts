@@ -81,7 +81,7 @@ export class HomePageComponent implements OnInit {
                 var engine = new p2pml.hlsjs.Engine();
                 this.player = new Clappr.Player({
                   parentId: "#video",
-                  source: `${environment.apiURL}/live/${data.stream._id}/index.m3u8`,
+                  source: `http://ec2-18-216-128-152.us-east-2.compute.amazonaws.com/live/${data.stream._id}/index.m3u8`,
                   width: "100%",
                   height: "100%",
                   playback: {

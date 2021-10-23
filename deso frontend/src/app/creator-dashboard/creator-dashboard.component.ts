@@ -12,6 +12,7 @@ import { environment } from '../../environments/environment'
   styleUrls: ['./creator-dashboard.component.scss']
 })
 export class CreatorDashboardComponent implements OnInit {
+  formSubmissionAlert = false
 
   constructor(public globalVars: GlobalVarsService, private http: HttpClient, private router: Router, private route: ActivatedRoute, private backendApi: BackendApiService) { }
   streamKey
@@ -41,6 +42,10 @@ export class CreatorDashboardComponent implements OnInit {
   getCategories() {
     this.http.get(`${environment.apiURL}/categories`).subscribe((data: { categories }) => this.categories = data.categories)
   }
+  
+  closeFormSubmissionAlert() {
+    this.formSubmissionAlert = false
+  }
 
   updateStreamInfo() {
     this.backendApi.jwtPost(`${environment.apiURL}`, `/stream/info`, this.globalVars.loggedInUser.PublicKeyBase58Check, {
@@ -48,7 +53,7 @@ export class CreatorDashboardComponent implements OnInit {
       category: this.streamCategory,
       title: this.streamTitle,
       description: this.streamDescription
-    }).subscribe((data) => { console.log(data) })
+    }).subscribe((data) => {this.formSubmissionAlert=true; console.log("form submitted");console.log(data)})
     console.log(this.streamTitle, this.streamDescription, this.streamCategory)
   }
 

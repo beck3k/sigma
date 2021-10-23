@@ -63,9 +63,17 @@ export class PageComponent implements OnInit {
     })
   }
 
+  goToMessages() {
+    this.router.navigate(['/inbox'])
+  }
+
   redirectToHomePage() {
     console.log("clicked")
     this.router.navigate(['/'])
+  }
+
+  goToNotification() {
+    this.router.navigate(['/notifications'])
   }
 
   changeStream(newStreamerPublicKey) {

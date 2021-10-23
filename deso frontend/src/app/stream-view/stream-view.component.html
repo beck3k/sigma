@@ -6,19 +6,18 @@
       <div class="m-0 p-0" id="video"></div>
       <div class="row">
         <div class="col-10">
-          <img [src]="streamerProfilePicture" alt="streamer profile picture" />
-          <div class="m-0 row">{{this.streamerUsername}}</div>
+          <!-- <img [src]="streamerProfilePicture" alt="streamer profile picture" /> -->
+          <!-- <div class="m-0 row">{{this.streamerUsername}}</div>
           <div class="m-0 row">{{this.streamTitle}}</div>
           <div class="m-0 row">{{this.streamDescription}}</div>
           <div class="m-0 row">Streamer Live: {{this.isStreamerLive}}</div>
-          <p *ngIf="this.streamer">Viewer Count: {{this.streamer.stream.viewerCount + 1}}</p>
-          <creator-profile-top-card *ngIf="streamerProfile" [profile]="streamerProfile" (userUnblocked)="unblockUser()"
-            (userBlocked)="blockUser()"></creator-profile-top-card>
-          <div class="row m-0">flair</div>
-          <button (click)="followStreamer()"
+          <p *ngIf="this.streamer">Viewer Count: {{this.streamer.stream.viewerCount + 1}}</p> -->
+          <creator-profile-top-card-stream-view *ngIf="streamerProfile" [isStreamerLive]="isStreamerLive" [streamDescription]="streamDescription" [viewerCount] = "this.streamer.stream.viewerCount + 1" [streamCategory]="streamCategory" [streamTitle]="streamTitle" [profile]="streamerProfile" (userUnblocked)="unblockUser()"
+            (userBlocked)="blockUser()"></creator-profile-top-card-stream-view>
+          <!-- <button (click)="followStreamer()"
             *ngIf="this.globalVars.loggedInUser.PublicKeyBase58Check !==this.streamerProfile.PublicKeyBase58Check && !following">Follow</button>
           <button (click)="unfollowStreamer()"
-            *ngIf="this.globalVars.loggedInUser.PublicKeyBase58Check !==this.streamerProfile.PublicKeyBase58Check && following">Unfollow</button>
+            *ngIf="this.globalVars.loggedInUser.PublicKeyBase58Check !==this.streamerProfile.PublicKeyBase58Check && following">Unfollow</button> -->
 
         </div>
 

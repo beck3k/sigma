@@ -99,7 +99,7 @@ const routes: Routes = [
   { path: RouteNames.SETTINGS, component: SettingsPageComponent, pathMatch: "full" },
   { path: RouteNames.BUY_DESO, component: BuyDeSoPageComponent, pathMatch: "full" },
   { path: RouteNames.PICK_A_COIN, component: PickACoinPageComponent, pathMatch: "full" },
-  { path: RouteNames.INBOX_PREFIX, component: MessagesPageComponent, pathMatch: "full" },
+  // { path: RouteNames.INBOX_PREFIX, component: MessagesPageComponent, pathMatch: "full" },
   { path: RouteNames.REFERRALS, component: ReferralsComponent, pathMatch: "full" },
   { path: RouteNames.SIGN_UP, component: SignUpComponent, pathMatch: "full" },
   { path: RouteNames.WALLET, component: WalletPageComponent, pathMatch: "full" },

@@ -13,10 +13,10 @@
       <ng-template #beingCalledElseBlock>
         <!-- Actual link-->
         <div [ngClass]="creatorCoinTemplate ? 'd-inline-block' : ''" *ngIf="isFollowing; else isFollowingElseBlock">
-          <a class="" [ngClass]="followLinkClass" (click)="unfollow($event)">Unfollow</a>
+          <a class="btn btn-primary" [ngClass]="followLinkClass" (click)="unfollow($event)">Unfollow</a>
         </div>
         <ng-template #isFollowingElseBlock>
-          <a class="" [ngClass]="followLinkClass" (click)="follow($event)">Follow</a>
+          <a class="btn btn-primary" [ngClass]="followLinkClass" (click)="follow($event)">Follow</a>
         </ng-template>
       </ng-template>
     </div>

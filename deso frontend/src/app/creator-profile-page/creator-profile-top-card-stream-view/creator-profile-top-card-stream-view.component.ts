@@ -8,13 +8,18 @@ import { AppRoutingModule } from "../../app-routing.module";
 import { FollowButtonComponent } from "../../follow-button/follow-button.component";
 import { Router } from "@angular/router";
 @Component({
-  selector: "creator-profile-top-card",
-  templateUrl: "./creator-profile-top-card.component.html",
-  styleUrls: ["./creator-profile-top-card.component.scss"],
+  selector: "creator-profile-top-card-stream-view",
+  templateUrl: "./creator-profile-top-card-stream-view.component.html",
+  styleUrls: ["./creator-profile-top-card-stream-view.component.scss"],
 })
-export class CreatorProfileTopCardComponent implements OnInit, OnDestroy {
+export class CreatorProfileTopCardStreamViewComponent implements OnInit, OnDestroy {
   @ViewChild(FollowButtonComponent, { static: false }) childFollowComponent;
   @Input() profile: any;
+  @Input() isStreamerLive: Boolean;
+  @Input() streamTitle
+  @Input() streamDescription
+  @Input() streamCategory
+  @Input() viewerCount
 
   // emits the UserUnblocked event
   @Output() userUnblocked = new EventEmitter();

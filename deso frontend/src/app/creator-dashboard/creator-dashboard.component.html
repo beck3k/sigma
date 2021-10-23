@@ -36,7 +36,7 @@
         <div class="row">
             <nav class="col-md-2 d-none d-md-block bg-light sidebar">
                 <div class="sidebar-sticky">
-                    <ul class="nav flex-column mt-3">
+                    <ul class="nav flex-column mt-4">
                         <li class="nav-item">
 
                             <span data-feather="home"></span>
@@ -111,7 +111,7 @@
                 </div>
             </nav>
 
-            <main *ngIf="globalVars.loggedInUser" role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <main *ngIf="globalVars.loggedInUser" role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-4 px-4">
                 <p class="text-lg font-medium mb-2">Stream Key</p>
                 <div class="flex">
                     <p *ngIf="streamKey">{{streamKey}} </p>
@@ -124,7 +124,7 @@
                                 d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z" />
                         </svg></div>
                 </div>
-                <button (click)="resetStreamKey()" class="btn btn-primary mt-1"> Reset
+                <button (click)="resetStreamKey()" class="btn btn-primary mt-2"> Reset
                     <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
                             <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
@@ -134,7 +134,9 @@
 
                 <br>
                 <br>
+                <br>
 
+                <p class="text-lg font-medium mb-2">Stream Information</p>
                 <form #streamInfoForm="ngForm" (ngSubmit)="updateStreamInfo()">
                     <div class="form-group">
                         <label for="streamTitle">Stream Title</label>
@@ -165,9 +167,21 @@
                 <br>
                 <br>
 
-                <creator-profile-top-card *ngIf="this.globalVars.loggedInUser.ProfileEntryResponse"
+                <div *ngIf="formSubmissionAlert">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Congrats!</strong> Your stream has been updated.
+                        <button type="button" class="close" (click)="closeFormSubmissionAlert()" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                </div>
+
+                <br>
+                <br>
+
+                <!-- <creator-profile-top-card *ngIf="this.globalVars.loggedInUser.ProfileEntryResponse"
                     [profile]="this.globalVars.loggedInUser.ProfileEntryResponse" (userUnblocked)="unblockUser()"
-                    (userBlocked)="blockUser()"></creator-profile-top-card>
+                    (userBlocked)="blockUser()"></creator-profile-top-card> -->
             </main>
 
         </div>

@@ -23,7 +23,7 @@
 <div class="fs-15px mt-15px" *ngIf="globalVars.showPhoneNumberVerification || globalVars.showJumio">Or</div>
 
 <div class="fs-15px mt-15px">
-  <a href="" [routerLink]="'/' + globalVars.RouteNames.BUY_DESO" queryParamsHandling="merge">
+  <button class="btn btn-primary" [routerLink]="'/' + globalVars.RouteNames.BUY_DESO" queryParamsHandling="merge">
     Purchase {{ globalVars.createProfileFeeInUsd() }} USD of DeSo
-  </a>
+  </button>
 </div>

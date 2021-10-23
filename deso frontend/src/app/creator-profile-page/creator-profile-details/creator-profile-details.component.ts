@@ -47,20 +47,15 @@ export class CreatorProfileDetailsComponent implements OnInit {
     private location: Location,
     private titleService: Title
   ) {
-    this.route.params.subscribe((params) => {
-      this.userName = params.username;
-      this._refreshContent();
-    });
-    this.route.queryParams.subscribe((params) => {
-      this.activeTab =
-        params.tab && params.tab in CreatorProfileDetailsComponent.TABS
-          ? CreatorProfileDetailsComponent.TABS[params.tab]
-          : "Posts";
-    });
+    this.userName = this.globalVars.loggedInUser.ProfileEntryResponse.Username
+    this.activeTab = "Creator Coin"
+    this._refreshContent()
   }
 
   ngOnInit() {
     this.titleService.setTitle(this.userName + " on DeSo");
+    this._refreshContent()
+
   }
 
   userBlocked() {
@@ -166,20 +161,9 @@ export class CreatorProfileDetailsComponent implements OnInit {
     }
 
     this.loading = true;
-    this.backendApi.GetSingleProfile(this.globalVars.localNode, "", this.userName).subscribe(
-      (res) => {
-        if (!res || res.IsBlacklisted) {
-          this.loading = false;
-          this.router.navigateByUrl("/" + this.appData.RouteNames.NOT_FOUND, { skipLocationChange: true });
-          return;
-        }
-        this.profile = res.Profile;
-        this.loading = false;
-      },
-      (_) => {
-        this.loading = false;
-      }
-    );
+
+    this.profile = this.globalVars.loggedInUser.ProfileEntryResponse;
+    this.loading = false
   }
 
   _handleTabClick(tabName: string) {
