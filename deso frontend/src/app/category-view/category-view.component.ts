@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { GlobalVarsService } from '../global-vars.service';
 import { BackendApiService } from '../backend-api.service';
+import { environment } from 'src/environments/environment';
 
 
 declare var p2pml: any;
@@ -16,7 +17,12 @@ declare var Clappr: any;
 
 export class CategoryViewComponent implements OnInit {
 
-  constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient, private globalVars: GlobalVarsService, private backendApi: BackendApiService) { }
+  constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient, private globalVars: GlobalVarsService, private backendApi: BackendApiService) { 
+    // this.categoryID = this.router.getCurrentNavigation().extras.state.categoryId
+    // this.getCategoryStreams()
+    this.categoryID = this.router.getCurrentNavigation().extras.state.categoryId
+    
+  }
   categoryID
   player
   anyoneLive = false
@@ -24,18 +30,20 @@ export class CategoryViewComponent implements OnInit {
   streamerProfilePicture
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      this.categoryID = params.get("category")
-      this.getCategoryStreams();
+    // this.route.paramMap.subscribe(params => {
+    //   this.categoryID = params.get("category")
+    //   this.getCategoryStreams();
+    console.log("categoryID: ", this.categoryID)
+    this.getCategoryStreams()
       if (this.player) {
         this.player.destroy()
       }
-    })
+    // })
   }
 
   getCategoryStreams() {
-    this.http.get(`http://149.159.16.161:3123/category/${this.categoryID}`).subscribe((data: { streams }) => {
-      console.log('data', data);
+    this.http.get(`${environment.apiURL}/category/${this.categoryID}`).subscribe((data: { streams }) => {
+      console.log('data on category', data);
       if (data.streams) {
         console.log('streams', data.streams)
         if (data.streams.length > 0) {
