@@ -1,0 +1,114 @@
+<app-page [channel]="true" [creatorDashboard]="true" [settings]="true" (accountChanged)="onAccountChange()">
+  <div class="row mt-3">
+    <!-- when someone live -->
+    <div *ngIf="anyoneLive" class="row p-0">
+      <div class="col-7 p-0 pl-3">
+        <div id="video"></div>
+      </div>
+      <div class="col-5 px-5">
+        <creator-profile-top-card-stream-view *ngIf="streamerProfile" [isStreamerLive]="anyoneLive"
+          [streamDescription]="streamDescription" [streamCategory]="streamCategory" [streamTitle]="streamTitle"
+          [profile]="streamerProfile" (userUnblocked)="unblockUser()" (userBlocked)="blockUser()">
+        </creator-profile-top-card-stream-view>
+
+      </div>
+    </div>
+    <br>
+    <!-- when noone live -->
+    <div *ngIf="!anyoneLive" class="col-7 p-0">
+      <p>No one is Live right now. Be the First to Go Live!</p>
+      <br>
+      <button (click)="goLive()" class="btn btn-primary">Go Live!</button>
+
+    </div>
+    <!-- general -->
+    <div *ngFor="let category of categories" class=""><button class="btn btn-primary"
+        (click)="goToCategory(category._id)">{{category.name}}</button> <br><br></div>
+
+    <br>
+    <section class="carousel slide" data-ride="carousel" id="postsCarousel">
+      <div class="container">
+          <div class="row">
+              <div class="col-12 text-right mb-4">
+                  <a class="btn btn-outline-secondary prev" href="" title="go back"><i class="fa fa-lg fa-chevron-left"></i></a>
+                  <a class="btn btn-outline-secondary next" href="" title="more"><i class="fa fa-lg fa-chevron-right"></i></a>
+              </div>
+          </div>
+      </div>
+      <div class="container p-t-0 m-t-2 carousel-inner">
+          <div class="row row-equal carousel-item active m-t-0">
+              <div class="col-md-4">
+                  <div class="card">
+                      <div class="card-img-top card-img-top-250">
+                          <img class="img-fluid" src="img/29223655865_4b8b01989e.jpg" alt="Carousel 1">
+                      </div>
+                      <div class="card-block p-t-2">
+                          <div class="card-header"><h3>flower1</h3></div>
+                          <div class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium animi molestias veritatis, pariatur dolorem error non reprehenderit vero, id. Incidunt hic laudantium soluta recusandae, voluptas libero et! Ipsa, maiores, ratione.</div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="card">
+                      <div class="card-img-top card-img-top-250">
+                          <img class="img-fluid" src="img/35515203036_f8006072b8.jpg" alt="Carousel 1">
+                      </div>
+                      <div class="card-block p-t-2">
+                          <div class="card-header"><h3>flower2</h3></div>
+                          <div class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium animi molestias veritatis, pariatur dolorem error non reprehenderit vero, id. Incidunt hic laudantium soluta recusandae, voluptas libero et! Ipsa, maiores, ratione.</div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="card">
+                      <div class="card-img-top card-img-top-250">
+                          <img class="img-fluid" src="img/3d75927b210409af8582828c4049fcd0.jpg" alt="Carousel 1">
+                      </div>
+                      <div class="card-block p-t-2">
+                          <div class="card-header"><h3>flower1</h3></div>
+                          <div class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium animi molestias veritatis, pariatur dolorem error non reprehenderit vero, id. Incidunt hic laudantium soluta recusandae, voluptas libero et! Ipsa, maiores, ratione.</div>
+                      </div>
+                  </div>
+              </div>
+              
+          </div>
+          <div class="row row-equal carousel-item m-t-0">
+              <div class="col-md-4">
+                  <div class="card">
+                      <div class="card-img-top card-img-top-250">
+                          <img class="img-fluid" src="img/45590771a1ee18248a49bd399ef99bf1--posts.jpg" alt="Carousel 1">
+                      </div>
+                      <div class="card-block p-t-2">
+                          <div class="card-header"><h3>flower1</h3></div>
+                          <div class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium animi molestias veritatis, pariatur dolorem error non reprehenderit vero, id. Incidunt hic laudantium soluta recusandae, voluptas libero et! Ipsa, maiores, ratione.</div>
+                      </div>
+                  </div>
+              </div>
+             <div class="col-md-4">
+                  <div class="card">
+                      <div class="card-img-top card-img-top-250">
+                          <img class="img-fluid" src="img/917d7b69ebd58d0ef0e561cdcb016303--red-rose-bouquet-red-rose-flower.jpg" alt="Carousel 1">
+                      </div>
+                      <div class="card-block p-t-2">
+                          <div class="card-header"><h3>flower1</h3></div>
+                          <div class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium animi molestias veritatis, pariatur dolorem error non reprehenderit vero, id. Incidunt hic laudantium soluta recusandae, voluptas libero et! Ipsa, maiores, ratione.</div>
+                      </div>
+                  </div>
+              </div>
+             <div class="col-md-4">
+                  <div class="card">
+                      <div class="card-img-top card-img-top-250">
+                          <img class="img-fluid" src="img/29223655865_4b8b01989e.jpg" alt="Carousel 1">
+                      </div>
+                      <div class="card-block p-t-2">
+                          <div class="card-header"><h3>flower1</h3></div>
+                          <div class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium animi molestias veritatis, pariatur dolorem error non reprehenderit vero, id. Incidunt hic laudantium soluta recusandae, voluptas libero et! Ipsa, maiores, ratione.</div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </section>
+
+  </div>
+</app-page>

@@ -1,0 +1,27 @@
+<!--
+  DESKTOP
+  -->
+<app-page [settings]="true" [backToSigma]="true" [channel]="true" [creatorDashboard]="true">
+<div class="global__desktop" *ngIf="!globalVars.isMobile()">
+
+  <div class="global__content__flex">
+    <div class="w-4/5 d-flex h-5/6 fixed">
+      <messages-inbox
+        class="messages-inbox__desktop-column border-bottom"
+        (selectedThreadEmitter)="selectedThread = $event"
+        [messageThreads]="globalVars.messageResponse ? globalVars.messageResponse.OrderedContactsWithMessages : null"
+      ></messages-inbox>
+      <messages-thread-view
+        class="messages-thread__desktop-column"
+        [messageThread]="
+          globalVars.messageResponse
+            ? selectedThread
+              ? selectedThread
+              : globalVars.messageResponse.OrderedContactsWithMessages[0]
+            : null
+        "
+      ></messages-thread-view>
+    </div>
+  </div>
+</div>
+</app-page>

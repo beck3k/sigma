@@ -1,0 +1,31 @@
+<app-page [channel]="true" [creatorDashboard]="true" [settings]="true" (accountChanged)="onAccountChange()">
+  <div class="row mt-3">
+    <!-- when someone live -->
+    <div *ngIf="anyoneLive" class="row p-0">
+      <div class="col-7 p-0 pl-3">
+        <div id="video"></div>
+      </div>
+      <div class="col-5 px-5">
+        <creator-profile-top-card-stream-view *ngIf="streamerProfile" [isStreamerLive]="anyoneLive"
+          [streamDescription]="streamDescription" [streamCategory]="streamCategory" [streamTitle]="streamTitle"
+          [profile]="streamerProfile" (userUnblocked)="unblockUser()" (userBlocked)="blockUser()">
+        </creator-profile-top-card-stream-view>
+
+      </div>
+    </div>
+    <br>
+    <!-- when noone live -->
+    <div *ngIf="!anyoneLive" class="col-7 p-0">
+      <p>No one is Live right now. Be the First to Go Live!</p>
+      <br>
+      <button (click)="goLive()" class="btn btn-primary">Go Live!</button>
+
+    </div>
+    <!-- general -->
+    <div *ngFor="let category of categories" class="row"><button class="btn btn-primary"
+        (click)="goToCategory(category._id)">{{category.name}}</button> <br><br></div>
+
+    <br>
+
+  </div>
+</app-page>
