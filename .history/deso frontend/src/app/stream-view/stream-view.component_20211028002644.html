@@ -1,0 +1,54 @@
+<app-page [settings]="true" [backToSigma]="true"
+  [channel]="true && this.globalVars.loggedInUser.ProfileEntryResponse?.Username && this.globalVars.loggedInUser.ProfileEntryResponse.Username!==this.streamerUsername"
+  [creatorDashboard]="true" [streamerProfile]="streamerProfile" (accountChanged)="onAccountChange()" (streamChanged)="onStreamChange()">
+  <div class="row">
+    <div class="col-9 p-0">
+      <div class="m-0 p-0" id="video"></div>
+      <div class="row">
+        <div class="col-10">
+          <!-- <img [src]="streamerProfilePicture" alt="streamer profile picture" /> -->
+          <!-- <div class="m-0 row">{{this.streamerUsername}}</div>
+          <div class="m-0 row">{{this.streamTitle}}</div>
+          <div class="m-0 row">{{this.streamDescription}}</div>
+          <div class="m-0 row">Streamer Live: {{this.isStreamerLive}}</div>
+          <p *ngIf="this.streamer">Viewer Count: {{this.streamer.stream.viewerCount + 1}}</p> -->
+          <creator-profile-top-card-stream-view *ngIf="streamerProfile && streamer" [isStreamerLive]="isStreamerLive" [streamDescription]="streamDescription" [viewerCount] = "this.streamer.stream.viewerCount + 1" [streamCategory]="streamCategory" [streamTitle]="streamTitle" [profile]="streamerProfile" (userUnblocked)="unblockUser()"
+            (userBlocked)="blockUser()"></creator-profile-top-card-stream-view>
+          <!-- <button (click)="followStreamer()"
+            *ngIf="this.globalVars.loggedInUser.PublicKeyBase58Check !==this.streamerProfile.PublicKeyBase58Check && !following">Follow</button>
+          <button (click)="unfollowStreamer()"
+            *ngIf="this.globalVars.loggedInUser.PublicKeyBase58Check !==this.streamerProfile.PublicKeyBase58Check && following">Unfollow</button> -->
+
+        </div>
+
+      </div>
+    </div>
+    <div class="fixed end-0 col-3 p-0 m-0 border-left border-primary bg-gray-50 h-screen" id="chatbar">
+      <div class="mb-2">
+        <h4 class="text-lg py-2" [ngStyle]="{padding: '0px 15px'}">Welcome to the Chat Room!</h4>
+
+        <div #scrollUp [scrollTop]="scrollUp.scrollHeight" class="bg-gray-50 chat-content overflow-y-auto">
+          <ul class="">
+            <li class="bg-gray-50 ml-3 overflow-hidden flex mt-1" *ngFor="let chatMessage of chatMessages">
+              <strong class="text-sm overflow-ellipsis whitespace-nowrap inline-block overflow-hidden" [ngStyle]="{'max-width': '25ch'}">{{chatMessage.user}} </strong>
+              <span class="inline-block text-sm">:&nbsp; </span>
+              <span class="inline-block text-sm">{{chatMessage.message}}</span>
+            </li>
+          </ul>
+        </div>
+
+        <form (ngSubmit)="sendMessage(sendForm)" #sendForm="ngForm">
+          <div class="row mt- pt-1">
+
+            <div class="ml-3 col-8">
+              <input type="text" class="form-control" name="message" id="input-message" autocomplete="off" ngModel>
+            </div>
+            <div class="col-2">
+              <button type="submit" class="btn btn-primary">Send</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</app-page>
