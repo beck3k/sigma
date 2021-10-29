@@ -13,6 +13,17 @@ var schema = new mongoose_1.Schema({
     },
     following: {
         type: [String]
+    },
+    followers: {
+        type: [String]
+    },
+    totalFollowing: {
+        type: Number,
+        "default": 0
+    },
+    totalFollowers: {
+        type: Number,
+        "default": 0
     }
 });
 var ViewerModel = (0, mongoose_1.model)('Viewer', schema);

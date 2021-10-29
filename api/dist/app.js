@@ -194,14 +194,20 @@ app.get('/stream/:pubkey', (req, res) => __awaiter(void 0, void 0, void 0, funct
 // PublicKey is of the streamer
 app.post('/follow/:publicKey', passport_1.default.authenticate('deso', { session: false }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var publicKey = req.body.PublicKeyBase58Check;
-    // Check that viewer exists
+    // Check that personFollowing exists
     yield db_1.ViewerModel.findOneAndUpdate({
         publicKey
     }, {}, {
         upsert: true
     });
+    // Check that personFollowed exists
+    yield db_1.ViewerModel.findOneAndUpdate({
+        publicKey: req.params.publicKey
+    }, {}, {
+        upsert: true
+    });
     // Check if following already, and push
-    const followers = yield db_1.ViewerModel.updateOne({
+    const personFollowing = yield db_1.ViewerModel.updateOne({
         publicKey,
         following: {
             $ne: req.params.publicKey
@@ -210,32 +216,74 @@ app.post('/follow/:publicKey', passport_1.default.authenticate('deso', { session
         $push: {
             following: req.params.publicKey
         },
+        $inc: {
+            totalFollowing: 1
+        }
+    });
+    const personFollowed = yield db_1.ViewerModel.updateOne({
+        publicKey: req.params.publicKey,
+        followers: {
+            $ne: publicKey
+        }
+    }, {
+        $push: {
+            followers: publicKey
+        },
+        $inc: {
+            totalFollowers: 1
+        }
     });
     res.json({
-        followers
+        personFollowing,
+        personFollowed
     });
 }));
-// Public key is of the viewer, will not be required after Auth implemented
+// Public key is of the personFollowing, will not be required after Auth implemented
 app.get('/following', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const publicKey = req.headers['publickeybase58check'];
-    const following = yield db_1.ViewerModel.findOne({
+    const personFollowing = yield db_1.ViewerModel.findOne({
         publicKey
     });
     res.json({
-        following: (following) ? following.following : []
+        following: (personFollowing) ? personFollowing.following : []
+    });
+}));
+// Public key is of the personFOllowed, will not be required after Auth implemented
+app.get('/followers', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const publicKey = req.headers['publickeybase58check'];
+    const personFollowed = yield db_1.ViewerModel.findOne({
+        publicKey
+    });
+    res.json({
+        followers: (personFollowed) ? personFollowed.followers : []
     });
 }));
 app.post('/unfollow/:pubicKey', passport_1.default.authenticate('deso', { session: false }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var publicKey = req.body.PublicKeyBase58Check;
-    const deleted = yield db_1.ViewerModel.updateOne({
+    // Update personFollowing
+    const personFollowing = yield db_1.ViewerModel.updateOne({
         publicKey
     }, {
         $pullAll: {
             following: [req.params.pubicKey]
+        },
+        $inc: {
+            totalFollowing: -1
+        }
+    });
+    // Update personFollowed
+    const personFollowed = yield db_1.ViewerModel.updateOne({
+        publicKey: req.params.pubicKey
+    }, {
+        $pullAll: {
+            followers: [publicKey]
+        },
+        $inc: {
+            totalFollowers: -1
         }
     });
     res.send({
-        deleted
+        personFollowing, personFollowed
     });
 }));
 app.get('/categories', (req, res) => __awaiter(void 0, void 0, void 0, function* () {

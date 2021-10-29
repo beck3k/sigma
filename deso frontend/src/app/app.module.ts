@@ -165,6 +165,13 @@ import { UserDashboardComponent } from './user-dashboard/user-dashboard.componen
 import { CategoryViewComponent } from './category-view/category-view.component';
 import { CreatorProfileTopCardStreamViewComponent } from './creator-profile-page/creator-profile-top-card-stream-view/creator-profile-top-card-stream-view.component';
 import { ManageLoggedInUsersFollowsPageComponent } from './manage-logged-in-users-follows-page/manage-logged-in-users-follows-page.component';
+import { StreamPlayerComponent } from './stream-player/stream-player.component';
+import { ChatComponent } from './chat/chat.component';
+import { SendChatFormComponent } from './send-chat-form/send-chat-form.component';
+import { FollowingComponent } from './following/following.component';
+import { FollowersComponent } from './followers/followers.component';
+import { UserFollowersComponent } from './user-followers/user-followers.component';
+import { UserFollowingComponent } from './user-following/user-following.component';
 const lightTheme: Theme = { key: "light", name: "Light Theme" };
 const darkTheme: Theme = { key: "dark", name: "Dark Theme" };
 const icydarkTheme: Theme = { key: "icydark", name: "Icy Dark Theme" };
@@ -310,6 +317,13 @@ const greenishTheme: Theme = { key: "greenish", name: "Green Theme" };
     CategoryViewComponent,
     CreatorProfileTopCardStreamViewComponent,
     ManageLoggedInUsersFollowsPageComponent,
+    StreamPlayerComponent,
+    ChatComponent,
+    SendChatFormComponent,
+    FollowingComponent,
+    FollowersComponent,
+    UserFollowersComponent,
+    UserFollowingComponent,
   ],
   imports: [
     BrowserModule,
