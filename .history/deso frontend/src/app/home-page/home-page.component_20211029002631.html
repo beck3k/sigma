@@ -27,13 +27,13 @@
     <div class="flex flex-wrap p-0">
 
       <!-- Column -->
-      <div class="my-1 px-1 w-full md:w-1/3 lg:my-4 lg:px-4 lg:w-1/6 hvr-forward mr-2"
+      <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/5 hvr-forward mr-2"
         *ngFor="let category of categories">
 
         <!-- Article -->
         <article class="overflow-hidden rounded-lg shadow-lg pb-2" (click)="goToCategory(category._id, category.name)">
 
-          <img alt="Placeholder" class="object-cover block h-44 w-full"
+          <img width="80px" height="100" alt="Placeholder" class="object-cover block h-15 w-full"
             [src]="category.imgUrl">
 
           <header class="flex items-center justify-center leading-tight p-2 md:p-4">

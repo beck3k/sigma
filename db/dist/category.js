@@ -11,7 +11,11 @@ var schema = new mongoose_1.Schema({
     streams: [{
             type: 'ObjectId',
             ref: 'Stream'
-        }]
+        }],
+    imgUrl: {
+        type: String,
+        required: true
+    }
 });
 var CategoryModel = (0, mongoose_1.model)('Category', schema);
 exports.CategoryModel = CategoryModel;

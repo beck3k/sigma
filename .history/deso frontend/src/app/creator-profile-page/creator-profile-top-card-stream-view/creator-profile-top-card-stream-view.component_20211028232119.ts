@@ -51,14 +51,6 @@ export class CreatorProfileTopCardStreamViewComponent implements OnInit, OnDestr
     this.router.navigate(["/" , username]);
   }
 
-  onFollow() {
-    this.followerCount++;
-  }
-
-  onUnfollow() {
-    this.followerCount--;
-  }
-
   profileBelongsToLoggedInUser(): boolean {
     return (
       this.globalVars.loggedInUser?.ProfileEntryResponse &&
@@ -180,7 +172,7 @@ export class CreatorProfileTopCardStreamViewComponent implements OnInit, OnDestr
     this.followingCount = data.followingCount;
     console.log(data, this.followingCount)
     data = await this.http.get(`${environment.apiURL}/followerCount`, { headers: { 'publickeybase58check': this.profile.PublicKeyBase58Check } }).toPromise()
-    this.followerCount = data.followerCount;
+    this.followerCount = data.followersCount;
     console.log(data, this.followerCount)
     // TODO: need a loading treatment while loading OR need to obtain all follows on pageload
 

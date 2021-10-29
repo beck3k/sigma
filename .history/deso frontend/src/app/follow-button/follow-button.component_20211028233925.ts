@@ -5,7 +5,7 @@
 // if you're following someone who follows you.
 // TODO: fix this ^^
 
-import { ChangeDetectorRef, Component, OnDestroy, OnInit , Output, EventEmitter} from "@angular/core";
+import { ChangeDetectorRef, Component, OnDestroy, OnInit , Output, EventEmitter, ChangeDetectionStrategy} from "@angular/core";
 import { GlobalVarsService } from "../global-vars.service";
 import { BackendApiService } from "../backend-api.service";
 import { Input } from "@angular/core";
@@ -19,6 +19,7 @@ import { environment } from "src/environments/environment";
   selector: "follow-button",
   templateUrl: "./follow-button.component.html",
   styleUrls: ["./follow-button.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FollowButtonComponent implements OnInit, OnDestroy {
   @Input() followedPubKeyBase58Check: string;
@@ -60,7 +61,6 @@ export class FollowButtonComponent implements OnInit, OnDestroy {
       this.followedPubKeyBase58Check
     );
   }
-  
 
   getFollowButtonClasses() {
     let classes = [...this.followButtonClasses]; // create a shallow copy of the classes

@@ -22,6 +22,7 @@ import { environment } from "src/environments/environment";
 })
 export class FollowButtonComponent implements OnInit, OnDestroy {
   @Input() followedPubKeyBase58Check: string;
+  @Input() loggedInUser: any;
   @Input() displayAsLink: boolean;
   @Input() unfollowButtonClasses = [];
   @Input() followButtonClasses = [];
@@ -60,7 +61,6 @@ export class FollowButtonComponent implements OnInit, OnDestroy {
       this.followedPubKeyBase58Check
     );
   }
-  
 
   getFollowButtonClasses() {
     let classes = [...this.followButtonClasses]; // create a shallow copy of the classes

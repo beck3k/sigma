@@ -17,6 +17,7 @@ import { environment } from "src/environments/environment";
 })
 export class CreatorProfileTopCardStreamViewComponent implements OnInit, OnDestroy {
   @ViewChild(FollowButtonComponent, { static: false }) childFollowComponent;
+  @Input() loggedInUser
   @Input() profile: any;
   @Input() isStreamerLive: Boolean;
   @Input() streamTitle

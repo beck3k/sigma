@@ -62,7 +62,7 @@
             </div>
             <ng-template #elseBlock>
                 <!-- Show follow button-->
-                <follow-button
+                <follow-button class=""
                     [displayAsLink]="true" [followedPubKeyBase58Check]="profile.PublicKeyBase58Check" (onFollow)="onFollow()" (onUnfollow)="onUnfollow()"></follow-button>
             </ng-template>
         </div>

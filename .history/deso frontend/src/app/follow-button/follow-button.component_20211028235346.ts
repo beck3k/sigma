@@ -60,7 +60,10 @@ export class FollowButtonComponent implements OnInit, OnDestroy {
       this.followedPubKeyBase58Check
     );
   }
-  
+
+  onAccountChange() {
+    
+  }
 
   getFollowButtonClasses() {
     let classes = [...this.followButtonClasses]; // create a shallow copy of the classes

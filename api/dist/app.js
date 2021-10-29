@@ -258,6 +258,24 @@ app.get('/followers', (req, res) => __awaiter(void 0, void 0, void 0, function* 
         followers: (personFollowed) ? personFollowed.followers : []
     });
 }));
+app.get('/followerCount', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const publicKey = req.headers['publickeybase58check'];
+    const personFollowed = yield db_1.ViewerModel.findOne({
+        publicKey
+    });
+    res.json({
+        followerCount: (personFollowed) ? personFollowed.totalFollowers : []
+    });
+}));
+app.get('/followingCount', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const publicKey = req.headers['publickeybase58check'];
+    const personFollowed = yield db_1.ViewerModel.findOne({
+        publicKey
+    });
+    res.json({
+        followingCount: (personFollowed) ? personFollowed.totalFollowing : []
+    });
+}));
 app.post('/unfollow/:pubicKey', passport_1.default.authenticate('deso', { session: false }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var publicKey = req.body.PublicKeyBase58Check;
     // Update personFollowing

@@ -51,14 +51,6 @@ export class CreatorProfileTopCardStreamViewComponent implements OnInit, OnDestr
     this.router.navigate(["/" , username]);
   }
 
-  onFollow() {
-    this.followerCount++;
-  }
-
-  onUnfollow() {
-    this.followerCount--;
-  }
-
   profileBelongsToLoggedInUser(): boolean {
     return (
       this.globalVars.loggedInUser?.ProfileEntryResponse &&

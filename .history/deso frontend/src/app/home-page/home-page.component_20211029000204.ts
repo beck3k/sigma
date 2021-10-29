@@ -120,12 +120,11 @@ export class HomePageComponent implements OnInit {
     console.log("get categoires called")
     this.http.get(`${environment.apiURL}/categories`).subscribe((data: { categories }) => {
       this.categories = data.categories
-      console.log(this.categories)
-      // for (let category of this.categories){
-      //   this.http.get(`${environment.apiURL}/category/${category._id}`).subscribe((data)=>{
-      //     console.log(data)
-      //   })
-      // }
+      for (let category of this.categories){
+        this.http.get(`${environment.apiURL}/category/${category._id}`).subscribe((data)=>{
+          console.log(data)
+        })
+      }
     })
   }
 

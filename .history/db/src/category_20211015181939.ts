@@ -4,7 +4,6 @@ import { Stream } from './stream';
 interface Category {
     name: string;
     streams: PopulatedDoc<Stream & Document>[];
-    imgUrl: string;
 };
 
 const schema = new Schema<Category>({
@@ -15,11 +14,7 @@ const schema = new Schema<Category>({
     streams: [{
         type: 'ObjectId',
         ref: 'Stream'
-    }],
-    imgUrl: {
-        type: String,
-        required: true
-    }
+    }]
 });
 
 const CategoryModel = model<Category>('Category', schema);
