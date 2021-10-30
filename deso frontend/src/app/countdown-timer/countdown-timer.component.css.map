@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "countdown-timer.component.scss"
+    ],
+    "names": [],
+    "file": "countdown-timer.component.css"
+}

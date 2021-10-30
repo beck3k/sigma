@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "left-bar.component.sass"
+    ],
+    "names": [],
+    "file": "left-bar.component.css"
+}

@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "follow-button.component.scss"
+    ],
+    "names": [],
+    "file": "follow-button.component.css"
+}
