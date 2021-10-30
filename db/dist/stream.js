@@ -31,7 +31,11 @@ var schema = new mongoose_1.Schema({
     viewerCount: {
         type: Number,
         "default": 0
-    }
+    },
+    messages: [{
+            user: String,
+            message: String
+        }]
 });
 var StreamModel = (0, mongoose_1.model)('Stream', schema);
 exports.StreamModel = StreamModel;

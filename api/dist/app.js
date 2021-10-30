@@ -191,6 +191,14 @@ app.get('/stream/:pubkey', (req, res) => __awaiter(void 0, void 0, void 0, funct
         stream
     });
 }));
+app.get('/stream/:pubKey/messages', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const stream = yield db_1.StreamModel.findOne({
+        publicKey: req.params.pubKey
+    }, '-key');
+    res.send({
+        messages: stream.messages
+    });
+}));
 // PublicKey is of the streamer
 app.post('/follow/:publicKey', passport_1.default.authenticate('deso', { session: false }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var publicKey = req.body.PublicKeyBase58Check;
@@ -370,6 +378,27 @@ function run() {
                 });
             });
         }
+        function addMessage(pubKey, msg) {
+            return __awaiter(this, void 0, void 0, function* () {
+                try {
+                    console.log('storing');
+                    const stream = yield db_1.StreamModel.findOneAndUpdate({
+                        publicKey: pubKey
+                    }, {
+                        $push: {
+                            messages: {
+                                user: msg.user,
+                                message: msg.message
+                            }
+                        }
+                    });
+                    console.log('stored');
+                }
+                catch (e) {
+                    console.log('DB store error', e);
+                }
+            });
+        }
         socketBridge.onDisconnect((topic, count) => {
             if (topic.substring(1, 5) == "chat") {
                 updateViewCount(topic.substring(6), count);
@@ -381,6 +410,10 @@ function run() {
                 updateViewCount(topic.substring(6), count);
             }
             console.log('topic ', topic, ' has ', count);
+        });
+        socketBridge.onMessage((topic, msg) => {
+            console.log('db', topic.substring(6), msg);
+            addMessage(topic.substring(6), msg);
         });
         socketBridge.start();
         app.listen(port, (err) => {

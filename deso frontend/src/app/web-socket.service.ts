@@ -39,7 +39,8 @@ export class WebSocketService {
   constructor() { }
 
   public openWebSocket(username){
-    this.webSocket = new WebSocket(`ws://ec2-3-144-203-39.us-east-2.compute.amazonaws.com:8069/chat/${username}`);
+    // this.webSocket = new WebSocket(`ws://ec2-3-144-203-39.us-east-2.compute.amazonaws.com:8069/chat/${username}`);
+    this.webSocket = new WebSocket(`ws://127.0.0.1:8069/chat/${username}`);
 
     this.webSocket.onopen = (event) => {
       console.log('Open: ', event);

@@ -1,5 +1,9 @@
 import { PopulatedDoc, Document } from 'mongoose';
 import { Category } from './category';
+interface Message {
+    user: String;
+    message: String;
+}
 interface Stream {
     key: string;
     publicKey: string;
@@ -8,6 +12,7 @@ interface Stream {
     category: PopulatedDoc<Category & Document>;
     isLive: boolean;
     viewerCount: number;
+    messages: Message[];
 }
 declare const StreamModel: import("mongoose").Model<Stream, {}, {}, {}>;
 export default StreamModel;

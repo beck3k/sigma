@@ -56,7 +56,7 @@ passport.use('deso', new AuthStrategy((req, done) => {
   } catch(error) {
     done(null, false);
   }
-  
+
 }));
 
 app.get('/', (req, res) => {
@@ -213,6 +213,16 @@ app.get('/stream/:pubkey', async (req, res) => {
   });
 });
 
+app.get('/stream/:pubKey/messages', async (req, res) => {
+  const stream = await StreamModel.findOne({
+    publicKey: req.params.pubKey
+  }, '-key');
+
+  res.send({
+    messages: stream.messages
+  });
+});
+
 // PublicKey is of the streamer
 app.post('/follow/:publicKey', passport.authenticate('deso', { session: false }), async (req, res) => {
   var publicKey = req.body.PublicKeyBase58Check;
@@ -332,7 +342,7 @@ app.post('/unfollow/:pubicKey', passport.authenticate('deso', { session: false }
   {
     $pullAll: {
       following: [req.params.pubicKey]
-    }, 
+    },
     $inc: {
       totalFollowing: -1
     }
@@ -400,7 +410,7 @@ app.get('/category/:category', async (req, res) => {
         categoryNotFound: true
       });
     }
-   
+
 
   // res.json({
   //   category: category.streams.map((stream) => {
@@ -410,7 +420,7 @@ app.get('/category/:category', async (req, res) => {
   //     // }
   //   })
   // });
-  
+
 });
 
 async function run(): Promise<void> {
@@ -428,6 +438,25 @@ async function run(): Promise<void> {
     });
   }
 
+  async function addMessage(pubKey, msg) {
+    try {
+      console.log('storing')
+      const stream = await StreamModel.findOneAndUpdate({
+        publicKey: pubKey
+      }, {
+        $push: {
+          messages: {
+            user: msg.user,
+            message: msg.message
+          }
+        }
+      });
+      console.log('stored');
+    } catch(e) {
+      console.log('DB store error', e);
+    }
+  }
+
   socketBridge.onDisconnect((topic, count) => {
     if(topic.substring(1,5) == "chat") {
       updateViewCount(topic.substring(6), count);
@@ -439,6 +468,11 @@ async function run(): Promise<void> {
       updateViewCount(topic.substring(6), count);
     }
     console.log('topic ', topic, ' has ', count);
+  });
+
+  socketBridge.onMessage((topic, msg) => {
+    console.log('db', topic.substring(6), msg);
+    addMessage(topic.substring(6), msg);
   });
 
   socketBridge.start();

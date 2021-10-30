@@ -1,9 +1,0 @@
-<div class="container">
-<update-profile [loggedInUser]="globalVars.loggedInUser"></update-profile>
-<div class="fs-15px pt-30px">DeSo Theme</div>
-<br />
-<select name="theme" id="theme" (change)="selectChangeHandler($event)" class="form-control selector">
-    <option *ngFor="let theme of themeService.themes" [value]="theme.key" [selected]="theme.key === themeService.theme">
-        {{ theme.name }}</option>
-</select>
-</div>

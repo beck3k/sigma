@@ -5,6 +5,6 @@
   "author": "Beck",
   "license": "MIT",
   "dependencies": {
-    "mongoose": "^6.0.8"
+
   }
 }

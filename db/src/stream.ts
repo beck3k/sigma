@@ -1,6 +1,11 @@
 import { Schema, model, PopulatedDoc, Document } from 'mongoose';
 import { Category } from './category';
 
+interface Message {
+  user: String;
+  message: String;
+}
+
 interface Stream {
   key: string;
   publicKey: string;
@@ -9,6 +14,7 @@ interface Stream {
   category: PopulatedDoc<Category & Document>;
   isLive: boolean;
   viewerCount: number;
+  messages: Message[];
 };
 
 const schema = new Schema<Stream>({
@@ -39,7 +45,11 @@ const schema = new Schema<Stream>({
   viewerCount: {
     type: Number,
     default: 0
-  }
+  },
+  messages: [{
+    user: String,
+    message: String
+  }]
 });
 
 const StreamModel = model<Stream>('Stream', schema);

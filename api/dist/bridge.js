@@ -18,29 +18,28 @@ class SocketBridge {
         this.topics = {};
         this.disconnectCallbacks = [];
         this.connectCallbacks = [];
+        this.onmessageCallbacks = [];
     }
     addClient(ws, topic) {
         return __awaiter(this, void 0, void 0, function* () {
             var handler = this;
             if (!this.topics[topic]) {
                 this.topics[topic] = {
-                    clients: [],
-                    messages: []
+                    clients: []
                 };
             }
             this.topics[topic].clients.push(ws);
-            this.topics[topic].messages.forEach((msg) => {
-                ws.send(msg);
-            });
             this.connectCallbacks.forEach(connect => {
                 connect(topic, handler.topics[topic].clients.length);
             });
             ws.on('message', (m) => {
                 console.log(JSON.parse(m));
-                handler.topics[topic].messages.push(m);
                 handler.topics[topic].clients.forEach((socket) => {
                     console.log('send ', m.toString(), ' to ', 'dumbfuck', 'topicshit: ', topic);
                     socket.send(m);
+                });
+                this.onmessageCallbacks.forEach(message => {
+                    message(topic, JSON.parse(m));
                 });
             });
             ws.on('close', () => {
@@ -70,6 +69,9 @@ class SocketBridge {
     }
     onConnect(callback) {
         this.connectCallbacks.push(callback);
+    }
+    onMessage(callback) {
+        this.onmessageCallbacks.push(callback);
     }
 }
 exports.default = SocketBridge;

@@ -1,8 +1,0 @@
-<div #scrollUp [scrollTop]="scrollUp.scrollHeight" class="bg-gray-50 chat-content overflow-y-auto">
-    <ul class="">
-      <li class="bg-gray-50 ml-3" *ngFor="let chatMessage of chatMessages">
-        <strong class="text-sm overflow-hidden overflow-ellipsis" [ngStyle]="{'max-width': '25ch'}" [style.color]="usernameColor(chatMessage.user)">{{showUsernameInChat(chatMessage.user)}}</strong>
-        <span class="text-sm break-words" [ngStyle]="{'hyphens': 'auto'}">{{chatMessage.message}}</span>
-      </li>
-    </ul>
-  </div>
