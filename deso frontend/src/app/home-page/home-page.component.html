@@ -7,7 +7,7 @@
       </div>
       <div class="col-5 px-5">
         <creator-profile-top-card-stream-view *ngIf="streamerProfile" [isStreamerLive]="anyoneLive"
-          [streamDescription]="streamDescription" [streamCategory]="streamCategory" [streamTitle]="streamTitle"
+          [streamDescription]="streamDescription" [streamCategory]="categoryName" [streamTitle]="streamTitle"
           [profile]="streamerProfile" (userUnblocked)="unblockUser()" (userBlocked)="blockUser()">
         </creator-profile-top-card-stream-view>
 

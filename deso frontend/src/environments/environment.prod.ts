@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  nodeUrl:  "http://ec2-3-21-40-233.us-east-2.compute.amazonaws.com",
   uploadImageHostname: "bitclout.com",
   jumioEndpointHostname: "bitclout.com",
   uploadVideoHostname: "bitclout.com",

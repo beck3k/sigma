@@ -1,7 +1,7 @@
 <app-page [settings]="true" [backToSigma]="true"
   [channel]="true && this.globalVars.loggedInUser.ProfileEntryResponse?.Username && this.globalVars.loggedInUser.ProfileEntryResponse.Username!==this.streamerUsername"
   [creatorDashboard]="true" [streamerProfile]="streamerProfile" (accountChanged)="onAccountChange()" (streamChanged)="onStreamChange()">
-  <div class="row">
+  <div class="row" *ngIf="doesStreamerHaveAccount">
     {{rerendered()}}
     <div class="col-9 p-0">
       <app-stream-player *ngIf="this.streamer" [streamId]='this.streamer.stream._id'></app-stream-player>
@@ -41,5 +41,8 @@
         <app-send-chat-form (messageSent)="sendMessage($event)"></app-send-chat-form>
       </div>
     </div>
+  </div>
+  <div *ngIf="!doesStreamerHaveAccount">
+    The account you searched for is yet to create an account on our platform. Invite them now!
   </div>
 </app-page>

@@ -141,8 +141,13 @@ export class StreamViewComponent implements OnInit, OnDestroy {
       this.backendApi.GetSingleProfile(this.globalVars.localNode, "", this.streamerUsername).subscribe((data) => {
         this.streamerProfile = data.Profile
         this.streamerPublicKey = this.streamerProfile.PublicKeyBase58Check
+        console.log(this.streamerPublicKey)
         this.getStreamer();
+      }, (err)=> {
+        console.log("error:",err)
+        this.router.navigate([this.globalVars.RouteNames.NOT_FOUND])
       })
+
     })
 
   }
@@ -198,12 +203,14 @@ export class StreamViewComponent implements OnInit, OnDestroy {
     // automatically refresh the stream view
   }
 
+  doesStreamerHaveAccount = true
+
   async getStreamer() {
     this.data = await this.http.get(`${environment.apiURL}/stream/${this.streamerPublicKey}`).toPromise();
     console.log(this.data)
     this.streamer = this.data
     if (!this.streamer.stream) {
-      this.router.navigate([this.globalVars.RouteNames.NOT_FOUND])
+      this.doesStreamerHaveAccount = false
     }
     this.streamDescription = this.streamer.stream.description
     this.streamTitle = this.streamer.stream.title
