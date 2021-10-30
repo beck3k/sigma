@@ -18,9 +18,9 @@ class SocketBridge {
         messages: []
       };
     }
-  
+
     this.topics[topic].clients.push(ws);
-  
+
     this.topics[topic].messages.forEach((msg) => {
       ws.send(msg);
     });
@@ -28,12 +28,12 @@ class SocketBridge {
     this.connectCallbacks.forEach(connect => {
       connect(topic, handler.topics[topic].clients.length);
     });
-  
+
     ws.on('message', (m) => {
       console.log(JSON.parse(m));
       handler.topics[topic].messages.push(m);
-      handler.topics[topic].clients.forEach((socket) => { 
-        console.log('send ', m.toString(), ' to ', 'dumbfuck', 'topicshit: ', topic);  
+      handler.topics[topic].clients.forEach((socket) => {
+        console.log('send ', m.toString(), ' to ', 'dumbfuck', 'topicshit: ', topic);
         socket.send(m);
       });
     });
@@ -45,27 +45,20 @@ class SocketBridge {
     });
   }
 
-<<<<<<< HEAD
   start() {
     const wss = new WebSocket.WebSocketServer({
       port: 8069
     });
-    
+
     console.log('chotiya');
     var handler = this;
-    
+
     wss.on('connection', (ws, req) => {
       const url = new URL(req.url, 'http://localhost:8069/');
       var topic = url.pathname.replace(/\//g, '_');
       ws.id = Math.random();
       handler.addClient(ws, topic);
       console.log('looser ', ws.id, ' connected to ', topic);
-=======
-  ws.on('message', (m) => {
-    topics[topic].messages.push(m);
-    topics[topic].clients.forEach((socket) => {
-      socket.send(m);
->>>>>>> afe50dec3866bb036802cc7a5b8a61ce5b896d46
     });
   }
 
