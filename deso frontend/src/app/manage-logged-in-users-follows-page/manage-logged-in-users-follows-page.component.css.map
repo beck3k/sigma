@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "manage-logged-in-users-follows-page.component.scss"
+    ],
+    "names": [],
+    "file": "manage-logged-in-users-follows-page.component.css"
+}

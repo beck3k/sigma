@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "send-chat-form.component.scss"
+    ],
+    "names": [],
+    "file": "send-chat-form.component.css"
+}

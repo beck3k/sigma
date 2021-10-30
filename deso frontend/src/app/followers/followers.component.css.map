@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "followers.component.scss"
+    ],
+    "names": [],
+    "file": "followers.component.css"
+}
