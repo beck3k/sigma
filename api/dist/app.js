@@ -132,6 +132,9 @@ app.get('/streams/live/one', (req, res) => __awaiter(void 0, void 0, void 0, fun
     const stream = yield db_1.StreamModel.findOne({
         isLive: true
     }, '-key');
+    if (stream && stream.category) {
+        yield stream.populate('category');
+    }
     res.send({
         stream
     });
@@ -323,8 +326,8 @@ function isStream(obj) {
 }
 app.get('/category/:category', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const fuckYou = yield db_1.CategoryModel.findById(req.params.category);
-        if (fuckYou) {
+        const category = yield db_1.CategoryModel.findById(req.params.category);
+        if (category) {
             yield db_1.CategoryModel.findById(req.params.category).populate('streams').exec((err, category) => {
                 if (category.streams) {
                     var streams = category.streams.map((stream) => {
