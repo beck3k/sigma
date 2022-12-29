@@ -1,3 +1,4 @@
 **/node_modules
 api/data
 **/zk-single-kafka-single
+.env
